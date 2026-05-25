@@ -321,37 +321,151 @@
         }
     ];
 
-    // ================= 城市设计项目数据 =================
+     // ================= 城市设计项目数据（图片路径改为 designjpgs 文件夹） =================
     const urbanProjects = [
         {
             title: "渔米",
             location: "广东省 · 中山市 · 南朗镇",
             description: "渔村振兴与生态景观设计",
-            pdfUrl: "pdfs/yumi.pdf",
-            emoji: "🎣"
+            emoji: "🎣",
+            images: [
+                "designjpgs/yumi/1.jpg",
+                "designjpgs/yumi/2.jpg",
+                "designjpgs/yumi/3.jpg",
+                "designjpgs/yumi/4.jpg"
+            ]
         },
         {
             title: "春雨桃花，淮北佳处",
             location: "江苏省 · 徐州市 · 新沂市",
             description: "乡村文旅与产业规划",
-            pdfUrl: "pdfs/chunyu_taohua.pdf",
-            emoji: "🌸"
+            emoji: "🌸",
+            images: [
+                "designjpgs/chunyu_taohua/1.jpg",
+                "designjpgs/chunyu_taohua/2.jpg",
+                "designjpgs/chunyu_taohua/3.jpg"
+            ]
         },
         {
             title: "文杏栽为梁，香茅结为宇",
             location: "江苏省 · 南京市 · 雨花台区",
             description: "城市新生活住宅设计",
-            pdfUrl: "pdfs/wenxing_xiangmao.pdf",
-            emoji: "🌳"
+            emoji: "🌳",
+            images: [
+                "designjpgs/wenxing_xiangmao/1.jpg",
+                "designjpgs/wenxing_xiangmao/2.jpg"
+            ]
         },
         {
             title: "新样小团龙",
             location: "江苏省 · 南京市 · 溧水区",
             description: "城市公共文化设施营造",
-            pdfUrl: "pdfs/xinyang_tuanlong.pdf",
-            emoji: "🐉"
+            emoji: "🐉",
+            images: [
+                "designjpgs/xinyang_tuanlong/1.jpg",
+                "designjpgs/xinyang_tuanlong/2.jpg",
+                "designjpgs/xinyang_tuanlong/3.jpg",
+                "designjpgs/xinyang_tuanlong/4.jpg",
+                "designjpgs/xinyang_tuanlong/5.jpg"
+            ]
         }
     ];
+// 图片浏览逻辑（与之前相同，仅路径变化）
+    let currentImageList = [];
+    let currentIndex = 0;
+    let currentProjectTitle = "";
+
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const backBtn = document.getElementById('backBtn');
+    const closeModalSpan = document.querySelector('.close-modal');
+
+    function openImageViewer(images, startIndex, projectTitle) {
+        currentImageList = images;
+        currentIndex = startIndex;
+        currentProjectTitle = projectTitle;
+        modal.style.display = 'block';
+        updateModalImage();
+    }
+
+    function updateModalImage() {
+        if (currentImageList.length > 0 && currentIndex >= 0 && currentIndex < currentImageList.length) {
+            modalImg.src = currentImageList[currentIndex];
+            if (currentIndex === 0) prevBtn.style.visibility = 'hidden';
+            else prevBtn.style.visibility = 'visible';
+            if (currentIndex === currentImageList.length - 1) {
+                nextBtn.style.visibility = 'hidden';
+                backBtn.style.display = 'block';
+            } else {
+                nextBtn.style.visibility = 'visible';
+                backBtn.style.display = 'none';
+            }
+        }
+    }
+
+    function nextImage() { if (currentIndex < currentImageList.length - 1) { currentIndex++; updateModalImage(); } }
+    function prevImage() { if (currentIndex > 0) { currentIndex--; updateModalImage(); } }
+    function closeAndBackToUrban() {
+        modal.style.display = 'none';
+        const homePage = document.getElementById('homePage');
+        const moduleArea = document.getElementById('moduleArea');
+        if (homePage && moduleArea) {
+            if (homePage.style.display !== 'none') showModuleView('urban');
+            else {
+                const activeNav = document.querySelector('.module-nav-btn.active');
+                if (!activeNav || activeNav.getAttribute('data-module') !== 'urban') showModuleView('urban');
+            }
+        }
+    }
+
+    prevBtn.onclick = prevImage;
+    nextBtn.onclick = nextImage;
+    closeModalSpan.onclick = () => { modal.style.display = 'none'; };
+    backBtn.onclick = closeAndBackToUrban;
+    window.onclick = (event) => { if (event.target == modal) modal.style.display = 'none'; };
+
+    function getModuleHTML(moduleName) {
+        if (moduleName === 'paper') {
+            let html = '<div class="projects-grid">';
+            for (let p of papersData) {
+                html += `
+                    <div class="project-card" data-pdf="${p.pdfUrl}">
+                        <div class="project-title">📄 ${escapeHtml(p.title)}</div>
+                        <div class="project-authors">👥 ${escapeHtml(p.authors)}</div>
+                        <div class="project-meta">
+                            <span class="project-journal">${escapeHtml(p.journal)}</span>
+                            <span class="project-if">${escapeHtml(p.ifInfo)}</span>
+                            <span class="project-year">${escapeHtml(p.year)}</span>
+                        </div>
+                        <div class="pdf-hint"><span>📄 点击卡片查看PDF全文</span><div class="slow-tip">⏱️ 第一次打开卡片会有些慢，请耐心等待哦~</div></div>
+                    </div>
+                `;
+            }
+            html += '</div>';
+            return html;
+        } else if (moduleName === 'urban') {
+            let html = '<div class="projects-grid">';
+            for (let proj of urbanProjects) {
+                html += `
+                    <div class="project-card" data-images='${JSON.stringify(proj.images)}' data-title="${escapeHtml(proj.title)}">
+                        <div class="project-title">${proj.emoji} ${escapeHtml(proj.title)}</div>
+                        <div class="project-location">📍 ${escapeHtml(proj.location)}</div>
+                        <div class="project-desc">${escapeHtml(proj.description)}</div>
+                        <div class="pdf-hint"><span>🖼️ 点击卡片查看设计图（可翻页）</span><div class="slow-tip">⏱️ 首次加载稍慢，之后会很快</div></div>
+                    </div>
+                `;
+            }
+            html += '</div>';
+            return html;
+        } else if (moduleName === 'sketch') {
+            return '<div class="coming-soon">✍️ 手绘模块 · 建设中</div>';
+        } else if (moduleName === 'photo') {
+            return '<div class="coming-soon">📸 摄影模块 · 建设中</div>';
+        }
+        return '<div class="coming-soon">内容加载中...</div>';
+    }
 
     function escapeHtml(str) {
         if (!str) return '';
@@ -363,86 +477,23 @@
         });
     }
 
-    function getModuleHTML(moduleName) {
-        if (moduleName === 'paper') {
-            let cardsHtml = `<div class="projects-grid">`;
-            for (let p of papersData) {
-                cardsHtml += `
-                    <div class="project-card" data-pdf="${p.pdfUrl}">
-                        <div class="project-title">📄 ${escapeHtml(p.title)}</div>
-                        <div class="project-authors">👥 ${escapeHtml(p.authors)}</div>
-                        <div class="project-meta">
-                            <span class="project-journal">${escapeHtml(p.journal)}</span>
-                            <span class="project-if">${escapeHtml(p.ifInfo)}</span>
-                            <span class="project-year">${escapeHtml(p.year)}</span>
-                        </div>
-                        <div class="pdf-hint">
-                            <span>📄 点击卡片查看PDF全文</span>
-                            <div class="slow-tip">⏱️ 第一次打开卡片会有些慢，请耐心等待哦~</div>
-                        </div>
-                    </div>
-                `;
-            }
-            cardsHtml += `</div>`;
-            return cardsHtml;
-        } 
-        else if (moduleName === 'urban') {
-            let cardsHtml = `<div class="projects-grid">`;
-            for (let proj of urbanProjects) {
-                cardsHtml += `
-                    <div class="project-card" data-pdf="${proj.pdfUrl}">
-                        <div class="project-title">${proj.emoji} ${escapeHtml(proj.title)}</div>
-                        <div class="project-location">📍 ${escapeHtml(proj.location)}</div>
-                        <div class="project-desc">${escapeHtml(proj.description)}</div>
-                        <div class="pdf-hint">
-                            <span>📄 点击卡片查看设计PDF</span>
-                            <div class="slow-tip">⏱️ 第一次打开卡片会有些慢，请耐心等待哦~</div>
-                        </div>
-                    </div>
-                `;
-            }
-            cardsHtml += `</div>`;
-            return cardsHtml;
-        }
-        else if (moduleName === 'sketch') {
-            return `
-                <div class="coming-soon">
-                    ✍️ 手绘模块 · 速写/建筑/景观手绘<br>
-                    <div class="placeholder-grid">
-                        <div class="placeholder-item">钢笔淡彩</div>
-                        <div class="placeholder-item">马克笔表现</div>
-                    </div>
-                    <p style="margin-top:1rem; font-size:0.85rem;">手绘作品扫描整理中，敬请期待</p>
-                </div>
-            `;
-        }
-        else if (moduleName === 'photo') {
-            return `
-                <div class="coming-soon">
-                    📸 摄影模块 · 城市/自然/人文<br>
-                    <div class="placeholder-grid">
-                        <div class="placeholder-item">城市天际线</div>
-                        <div class="placeholder-item">生态纪实</div>
-                    </div>
-                    <p style="margin-top:1rem; font-size:0.85rem;">摄影集即将上线</p>
-                </div>
-            `;
-        }
-        return '<div class="coming-soon">内容加载中...</div>';
-    }
-
     function attachCardEvents() {
         const cards = document.querySelectorAll('.project-card');
         cards.forEach(card => {
             card.removeEventListener('click', card._handler);
             const pdfPath = card.getAttribute('data-pdf');
+            const imagesAttr = card.getAttribute('data-images');
+            const title = card.getAttribute('data-title');
             const handler = (e) => {
                 e.stopPropagation();
-                if (pdfPath && pdfPath.trim() !== '' && !pdfPath.includes('placeholder')) {
-                    window.open(pdfPath, '_blank');
-                } else {
-                    alert('📄 PDF 文件路径未配置。请检查对应项目的 pdfUrl，并确保 PDF 文件已上传到正确的文件夹。');
-                }
+                if (pdfPath) window.open(pdfPath, '_blank');
+                else if (imagesAttr) {
+                    try {
+                        const images = JSON.parse(imagesAttr);
+                        if (images && images.length) openImageViewer(images, 0, title);
+                        else alert('该作品暂无图片');
+                    } catch(e) { alert('图片数据错误'); }
+                } else alert('内容未配置');
             };
             card.addEventListener('click', handler);
             card._handler = handler;
@@ -453,60 +504,42 @@
         const homePage = document.getElementById('homePage');
         const moduleArea = document.getElementById('moduleArea');
         if (!homePage || !moduleArea) return;
-        
         const navBtns = document.querySelectorAll('.module-nav-btn');
         navBtns.forEach(btn => {
-            if (btn.getAttribute('data-module') === moduleName) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
+            if (btn.getAttribute('data-module') === moduleName) btn.classList.add('active');
+            else btn.classList.remove('active');
         });
-        
         const contentDiv = document.getElementById('moduleContent');
         if (contentDiv) {
             contentDiv.innerHTML = getModuleHTML(moduleName);
             attachCardEvents();
         }
-        
         homePage.style.display = 'none';
         moduleArea.style.display = 'block';
     }
 
     function showHome() {
-        const homePage = document.getElementById('homePage');
-        const moduleArea = document.getElementById('moduleArea');
-        if (homePage && moduleArea) {
-            homePage.style.display = 'block';
-            moduleArea.style.display = 'none';
-        }
+        document.getElementById('homePage').style.display = 'block';
+        document.getElementById('moduleArea').style.display = 'none';
     }
 
     function init() {
-        const cards = document.querySelectorAll('.home-card');
-        cards.forEach(card => {
+        document.querySelectorAll('.home-card').forEach(card => {
             card.addEventListener('click', () => {
                 const module = card.getAttribute('data-module');
                 if (module) showModuleView(module);
             });
         });
-        
-        const navBtns = document.querySelectorAll('.module-nav-btn');
-        navBtns.forEach(btn => {
+        document.querySelectorAll('.module-nav-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const module = btn.getAttribute('data-module');
-                if (module === 'home') {
-                    showHome();
-                } else {
-                    showModuleView(module);
-                }
+                if (module === 'home') showHome();
+                else if (module) showModuleView(module);
             });
         });
-        
         document.getElementById('homePage').style.display = 'block';
         document.getElementById('moduleArea').style.display = 'none';
     }
-    
     init();
 </script>
 </body>
