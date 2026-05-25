@@ -148,6 +148,7 @@
             box-shadow: 0 20px 30px -12px rgba(0,0,0,0.12);
             border-color: #cbd5e1;
         }
+        /* 字体层级 */
         .project-title {
             font-size: 1.25rem;
             font-weight: 700;
@@ -300,7 +301,7 @@
 </div>
 
 <script>
-    // ================= 论文数据（使用 jsDelivr CDN 加速） =================
+    // ================= 论文数据（含 IF 信息） =================
     const papersData = [
         {
             title: "水库消落带植物多样性空间格局预测模型及环境解释 —— 基于XGBoost-SHAP模型框架",
@@ -308,7 +309,7 @@
             journal: "生态学报",
             year: "2024, 44(21): 9652-9669",
             ifInfo: "IF=6.5, C核",
-            pdfUrl: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/papers/reservoir_diversity.pdf"
+            pdfUrl: "papers/reservoir_diversity.pdf"
         },
         {
             title: "中国立体绿化政策发展与量化评价",
@@ -316,38 +317,38 @@
             journal: "中国城市林业",
             year: "2025, 23(01): 179-187",
             ifInfo: "IF=2.1",
-            pdfUrl: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/papers/green_policy.pdf"
+            pdfUrl: "papers/green_policy.pdf"
         }
     ];
 
-    // ================= 城市设计项目数据（使用 jsDelivr CDN 加速） =================
+    // ================= 城市设计项目数据 =================
     const urbanProjects = [
         {
             title: "渔米",
             location: "广东省 · 中山市 · 南朗镇",
             description: "渔村振兴与生态景观设计",
-            pdfUrl: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/pdfs/yumi.pdf",
+            pdfUrl: "pdfs/yumi.pdf",
             emoji: "🎣"
         },
         {
             title: "春雨桃花，淮北佳处",
             location: "江苏省 · 徐州市 · 新沂市",
             description: "乡村文旅与产业规划",
-            pdfUrl: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/pdfs/chunyu_taohua.pdf",
+            pdfUrl: "pdfs/chunyu_taohua.pdf",
             emoji: "🌸"
         },
         {
             title: "文杏栽为梁，香茅结为宇",
             location: "江苏省 · 南京市 · 雨花台区",
             description: "城市新生活住宅设计",
-            pdfUrl: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/pdfs/wenxing_xiangmao.pdf",
+            pdfUrl: "pdfs/wenxing_xiangmao.pdf",
             emoji: "🌳"
         },
         {
             title: "新样小团龙",
             location: "江苏省 · 南京市 · 溧水区",
             description: "城市公共文化设施营造",
-            pdfUrl: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/pdfs/xinyang_tuanlong.pdf",
+            pdfUrl: "pdfs/xinyang_tuanlong.pdf",
             emoji: "🐉"
         }
     ];
@@ -377,7 +378,7 @@
                         </div>
                         <div class="pdf-hint">
                             <span>📄 点击卡片查看PDF全文</span>
-                            <div class="slow-tip">⏱️ 首次加载稍慢（CDN 预热），之后会很快</div>
+                            <div class="slow-tip">⏱️ 第一次打开卡片会有些慢，请耐心等待哦~</div>
                         </div>
                     </div>
                 `;
@@ -395,7 +396,7 @@
                         <div class="project-desc">${escapeHtml(proj.description)}</div>
                         <div class="pdf-hint">
                             <span>📄 点击卡片查看设计PDF</span>
-                            <div class="slow-tip">⏱️ 首次加载稍慢（CDN 预热），之后会很快</div>
+                            <div class="slow-tip">⏱️ 第一次打开卡片会有些慢，请耐心等待哦~</div>
                         </div>
                     </div>
                 `;
