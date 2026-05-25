@@ -19,16 +19,14 @@
             padding: 2rem 1rem;
         }
 
-        /* 容器 */
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* 头部 */
         .header {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
         }
         .name {
             font-size: 2.2rem;
@@ -48,21 +46,65 @@
             padding-top: 0.5rem;
         }
 
-        /* 导航 Tabs */
-        .nav-tabs {
+        /* 首页四大板块网格 */
+        .home-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .home-card {
+            background: white;
+            border-radius: 28px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05), 0 0 0 1px #f0f2f5;
+            border: 1px solid #edf2f7;
+        }
+        .home-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15);
+            border-color: #cbd5e1;
+        }
+        .home-emoji {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+        .home-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1e2a3a;
+        }
+        .home-desc {
+            font-size: 0.9rem;
+            color: #5a6e7c;
+        }
+        .welcome {
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #2c3e50;
+            margin: 1rem 0 0.5rem;
+        }
+
+        /* 模块顶部导航栏 */
+        .module-nav {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 0.75rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
             border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 0.75rem;
         }
-        .tab-btn {
+        .module-nav-btn {
             background: transparent;
             border: none;
-            padding: 0.6rem 1.4rem;
-            font-size: 1rem;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.95rem;
             font-weight: 500;
             border-radius: 40px;
             cursor: pointer;
@@ -70,11 +112,11 @@
             color: #4a5b6e;
             font-family: inherit;
         }
-        .tab-btn:hover {
+        .module-nav-btn:hover {
             background: #e9edf2;
             color: #1e2a3a;
         }
-        .tab-btn.active {
+        .module-nav-btn.active {
             background: #1e2a3a;
             color: white;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -87,7 +129,6 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.05);
             padding: 2rem 1.8rem;
             min-height: 500px;
-            transition: all 0.2s;
         }
 
         /* 论文卡片网格 */
@@ -112,7 +153,7 @@
             border-color: #cbd5e1;
         }
         .paper-title {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 600;
             color: #0f172a;
             line-height: 1.4;
@@ -138,7 +179,6 @@
             font-size: 0.85rem;
             color: #2d3a46;
             margin: 0.5rem 0;
-            font-style: normal;
         }
         .pdf-hint {
             margin-top: 1rem;
@@ -155,6 +195,7 @@
             padding: 0.2rem 0.5rem;
             border-radius: 30px;
         }
+
         .coming-soon {
             text-align: center;
             padding: 3rem 1rem;
@@ -179,28 +220,19 @@
             border: 1px dashed #cbd5e1;
         }
 
-        /* 脚注 */
         .footer {
             text-align: center;
-            margin-top: 2.5rem;
+            margin-top: 2rem;
             font-size: 0.75rem;
             color: #7c8b9c;
         }
 
         @media (max-width: 640px) {
-            body {
-                padding: 1rem;
-            }
-            .module-content {
-                padding: 1.5rem;
-            }
-            .paper-title {
-                font-size: 1.1rem;
-            }
-            .tab-btn {
-                padding: 0.4rem 1rem;
-                font-size: 0.9rem;
-            }
+            body { padding: 1rem; }
+            .module-content { padding: 1.5rem; }
+            .paper-title { font-size: 1rem; }
+            .home-title { font-size: 1.4rem; }
+            .welcome { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -211,85 +243,77 @@
         <div class="tagline">城市规划 | 生态环境 | 设计研究</div>
     </div>
 
-    <!-- 模块导航 -->
-    <div class="nav-tabs">
-        <button class="tab-btn" data-module="urban">城市设计</button>
-        <button class="tab-btn" data-module="sketch">手绘</button>
-        <button class="tab-btn active" data-module="paper">论文</button>
-        <button class="tab-btn" data-module="photo">摄影</button>
+    <!-- 首页：四大板块 -->
+    <div id="homePage">
+        <div class="welcome">✨ 您希望从哪里了解我？ ✨</div>
+        <div class="home-grid">
+            <div class="home-card" data-module="paper">
+                <div class="home-emoji">📄</div>
+                <div class="home-title">论文</div>
+                <div class="home-desc">学术研究成果 · 已发表论文</div>
+            </div>
+            <div class="home-card" data-module="urban">
+                <div class="home-emoji">🏙️</div>
+                <div class="home-title">城市设计</div>
+                <div class="home-desc">设计作品 · 滨水空间 / TOD</div>
+            </div>
+            <div class="home-card" data-module="photo">
+                <div class="home-emoji">📸</div>
+                <div class="home-title">摄影</div>
+                <div class="home-desc">城市 · 自然 · 人文影像</div>
+            </div>
+            <div class="home-card" data-module="sketch">
+                <div class="home-emoji">✍️</div>
+                <div class="home-title">手绘</div>
+                <div class="home-desc">钢笔淡彩 · 马克笔表现</div>
+            </div>
+        </div>
     </div>
 
-    <!-- 动态内容区域 -->
-    <div class="module-content" id="moduleContent">
-        <!-- 论文模块默认显示 -->
+    <!-- 模块区域（含导航栏 + 内容，初始隐藏） -->
+    <div id="moduleArea" style="display: none;">
+        <div class="module-nav" id="moduleNav">
+            <button class="module-nav-btn" data-module="home">🏠 首页</button>
+            <button class="module-nav-btn" data-module="paper">📄 论文</button>
+            <button class="module-nav-btn" data-module="urban">🏙️ 城市设计</button>
+            <button class="module-nav-btn" data-module="photo">📸 摄影</button>
+            <button class="module-nav-btn" data-module="sketch">✍️ 手绘</button>
+        </div>
+        <div class="module-content" id="moduleContent">
+            <!-- 动态内容会填充到这里 -->
+        </div>
     </div>
+
     <div class="footer">
-        © 李佳轩 · 扫描二维码访问作品集 | 点击论文卡片查看PDF
+        © 李佳轩 · 点击论文卡片查看PDF全文
     </div>
 </div>
 
 <script>
-    // ------------------------------
-    // 论文数据配置 (可轻松修改PDF路径)
-    // 请将您的论文PDF文件放在 "papers/" 文件夹下，并修改下方路径
-    // 例如: pdf1: "papers/li_ecologica_2024.pdf"
-    // ------------------------------
+    // ================= 论文数据 =================
+    // 请确保 papers 文件夹下存在对应文件，或修改为实际 PDF 链接（绝对路径）
     const papersData = [
         {
             title: "水库消落带植物多样性空间格局预测模型及环境解释 —— 基于XGBoost-SHAP模型框架",
             authors: "刘瑞雪, 李佳轩, 李云",
             journal: "生态学报",
             year: "2024, 44(21): 9652-9669",
-            pdfUrl: "papers/reservoir_diversity.pdf",   // 【请替换为实际PDF路径】
-            ifactor: "IF 6.5, C核"
+            pdfUrl: "papers/reservoir_diversity.pdf"   // 请根据实际文件名修改
         },
         {
             title: "中国立体绿化政策发展与量化评价",
             authors: "刘瑞雪, 李佳轩, 严仙友阳",
             journal: "中国城市林业",
             year: "2025, 23(01): 179-187",
-            pdfUrl: "papers/green_policy.pdf",   // 【请替换为实际PDF路径】
-            ifactor: "IF 2.1"
+            pdfUrl: "papers/green_policy.pdf"          // 请根据实际文件名修改
         }
     ];
 
-    // 其他模块占位内容 (待扩展)
-    const modules = {
-        urban: `
-            <div class="coming-soon">
-                🏙️ 城市设计模块 · 建设中<br>
-                <div class="placeholder-grid">
-                    <div class="placeholder-item">滨水空间设计<br>(即将呈现)</div>
-                    <div class="placeholder-item">TOD综合开发<br>(即将呈现)</div>
-                </div>
-                <p style="margin-top:1.5rem; font-size:0.85rem;">城市设计作品集 · 效果图与分析图待更新</p>
-            </div>
-        `,
-        sketch: `
-            <div class="coming-soon">
-                ✍️ 手绘模块 · 速写/建筑/景观手绘<br>
-                <div class="placeholder-grid">
-                    <div class="placeholder-item">钢笔淡彩</div>
-                    <div class="placeholder-item">马克笔表现</div>
-                </div>
-                <p style="margin-top:1rem; font-size:0.85rem;">手绘作品扫描整理中，敬请期待</p>
-            </div>
-        `,
-        photo: `
-            <div class="coming-soon">
-                📸 摄影模块 · 城市/自然/人文<br>
-                <div class="placeholder-grid">
-                    <div class="placeholder-item">城市天际线</div>
-                    <div class="placeholder-item">生态纪实</div>
-                </div>
-                <p style="margin-top:1rem; font-size:0.85rem;">摄影集即将上线</p>
-            </div>
-        `,
-        paper: function() {
-            // 动态生成论文卡片
+    // ================= 模块内容生成 =================
+    function getModuleHTML(moduleName) {
+        if (moduleName === 'paper') {
             let cardsHtml = `<div class="papers-grid">`;
-            for (let i = 0; i < papersData.length; i++) {
-                const p = papersData[i];
+            for (let p of papersData) {
                 cardsHtml += `
                     <div class="paper-card" data-pdf="${p.pdfUrl}">
                         <div class="paper-title">${escapeHtml(p.title)}</div>
@@ -304,96 +328,148 @@
                     </div>
                 `;
             }
-            cardsHtml += `</div><p style="margin-top:1.5rem; font-size:0.75rem; color:#6c7a8a; text-align:center;">※ PDF文件需置于服务器「papers」文件夹下，可联系作者获取</p>`;
+            cardsHtml += `</div>`;
             return cardsHtml;
+        } 
+        else if (moduleName === 'urban') {
+            return `
+                <div class="coming-soon">
+                    🏙️ 城市设计模块 · 建设中<br>
+                    <div class="placeholder-grid">
+                        <div class="placeholder-item">滨水空间设计<br>(即将呈现)</div>
+                        <div class="placeholder-item">TOD综合开发<br>(即将呈现)</div>
+                    </div>
+                    <p style="margin-top:1.5rem; font-size:0.85rem;">城市设计作品集 · 效果图与分析图待更新</p>
+                </div>
+            `;
         }
-    };
+        else if (moduleName === 'sketch') {
+            return `
+                <div class="coming-soon">
+                    ✍️ 手绘模块 · 速写/建筑/景观手绘<br>
+                    <div class="placeholder-grid">
+                        <div class="placeholder-item">钢笔淡彩</div>
+                        <div class="placeholder-item">马克笔表现</div>
+                    </div>
+                    <p style="margin-top:1rem; font-size:0.85rem;">手绘作品扫描整理中，敬请期待</p>
+                </div>
+            `;
+        }
+        else if (moduleName === 'photo') {
+            return `
+                <div class="coming-soon">
+                    📸 摄影模块 · 城市/自然/人文<br>
+                    <div class="placeholder-grid">
+                        <div class="placeholder-item">城市天际线</div>
+                        <div class="placeholder-item">生态纪实</div>
+                    </div>
+                    <p style="margin-top:1rem; font-size:0.85rem;">摄影集即将上线</p>
+                </div>
+            `;
+        }
+        return '<div class="coming-soon">内容加载中...</div>';
+    }
 
-    // 简单的防XSS
     function escapeHtml(str) {
+        if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
             if (m === '&') return '&amp;';
             if (m === '<') return '&lt;';
             if (m === '>') return '&gt;';
             return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-            return c;
         });
     }
 
-    // 渲染当前模块
-    let currentModule = 'paper';
+    // 显示模块视图（隐藏首页，显示模块区域）
+    function showModuleView(moduleName) {
+        const homePage = document.getElementById('homePage');
+        const moduleArea = document.getElementById('moduleArea');
+        if (!homePage || !moduleArea) return;
+        
+        // 更新导航栏激活状态
+        const navBtns = document.querySelectorAll('.module-nav-btn');
+        navBtns.forEach(btn => {
+            if (btn.getAttribute('data-module') === moduleName) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        
+        // 渲染模块内容
+        const contentDiv = document.getElementById('moduleContent');
+        if (contentDiv) {
+            contentDiv.innerHTML = getModuleHTML(moduleName);
+            // 绑定论文卡片事件
+            if (moduleName === 'paper') {
+                attachPaperCardEvents();
+            }
+        }
+        
+        // 切换显示
+        homePage.style.display = 'none';
+        moduleArea.style.display = 'block';
+    }
 
-    function renderModule(moduleName) {
-        const container = document.getElementById('moduleContent');
-        if (!container) return;
-        if (moduleName === 'paper') {
-            container.innerHTML = modules.paper();
-            // 绑定论文卡片点击事件 (动态生成的卡片)
-            attachPaperCardEvents();
-        } else {
-            container.innerHTML = modules[moduleName] || '<div class="coming-soon">模块加载中...</div>';
+    // 返回首页（词云页）
+    function showHome() {
+        const homePage = document.getElementById('homePage');
+        const moduleArea = document.getElementById('moduleArea');
+        if (homePage && moduleArea) {
+            homePage.style.display = 'block';
+            moduleArea.style.display = 'none';
         }
     }
 
-    // 绑定卡片点击打开PDF
+    // 论文卡片点击打开 PDF
     function attachPaperCardEvents() {
         const cards = document.querySelectorAll('.paper-card');
         cards.forEach(card => {
-            // 移除之前的监听器避免重复
-            card.removeEventListener('click', card._clickHandler);
+            card.removeEventListener('click', card._handler);
             const pdfPath = card.getAttribute('data-pdf');
-            const handler = function(e) {
-                // 阻止冒泡，避免意外
+            const handler = (e) => {
                 e.stopPropagation();
                 if (pdfPath && pdfPath !== 'papers/paper1.pdf' && pdfPath !== 'papers/paper2.pdf') {
-                    // 用户可能已经替换为真实路径
                     window.open(pdfPath, '_blank');
                 } else {
-                    // 演示提示，提醒用户替换PDF文件
-                    alert('📄 请将论文PDF文件放入 "papers" 文件夹，并修改代码中的 pdfUrl 路径。\n\n当前示例文件：' + pdfPath);
+                    alert('📄 PDF 文件未正确配置。请检查 papersData 中的 pdfUrl 路径，并确保文件已上传至 papers 文件夹。');
                 }
             };
             card.addEventListener('click', handler);
-            card._clickHandler = handler;
+            card._handler = handler;
         });
     }
 
-    // 切换tab样式 + 内容
-    function setupTabs() {
-        const btns = document.querySelectorAll('.tab-btn');
-        btns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                const module = this.getAttribute('data-module');
-                if (!module) return;
-                // 更新active样式
-                btns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentModule = module;
-                renderModule(module);
+    // 初始化：首页卡片点击事件 + 导航栏点击事件
+    function init() {
+        // 首页卡片点击
+        const cards = document.querySelectorAll('.home-card');
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const module = card.getAttribute('data-module');
+                if (module) showModuleView(module);
             });
         });
+        
+        // 导航栏按钮点击
+        const navBtns = document.querySelectorAll('.module-nav-btn');
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const module = btn.getAttribute('data-module');
+                if (module === 'home') {
+                    showHome();
+                } else {
+                    showModuleView(module);
+                }
+            });
+        });
+        
+        // 初始显示首页
+        document.getElementById('homePage').style.display = 'block';
+        document.getElementById('moduleArea').style.display = 'none';
     }
-
-    // 初始化: 默认显示论文模块
-    function init() {
-        setupTabs();
-        renderModule('paper');   // 默认论文模块
-    }
-
+    
     init();
 </script>
-<!-- 使用说明（替换PDF步骤） -->
-<!-- 
-    【重要】如何替换真实的论文PDF文件：
-    1. 在您的网页部署目录下新建一个文件夹，命名为 "papers"
-    2. 将两篇论文PDF分别重命名为 paper1.pdf 和 paper2.pdf (或任意名称)
-    3. 打开上方script中的papersData数组，修改对应pdfUrl为实际路径，例如：
-       第一篇：pdfUrl: "papers/reservoir_diversity.pdf"
-       第二篇：pdfUrl: "papers/green_policy.pdf"
-    4. 重新上传所有文件到服务器，确保PDF可被访问。
-    5. 若您的PDF放在其他位置（如云盘链接），也可以直接填写完整URL（需支持跨域或直接下载）。
-    
-    【二维码生成】将本网页上传至任意静态托管（GitHub Pages、七牛云、自己的服务器等），
-    获取访问链接后，使用二维码生成工具即可。
--->
+</body>
+</html>
