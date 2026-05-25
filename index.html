@@ -289,44 +289,48 @@
             title: "水库消落带植物多样性空间格局预测模型及环境解释 —— 基于XGBoost-SHAP模型框架",
             authors: "刘瑞雪, 李佳轩, 李云",
             journal: "生态学报",
-            year: "2024, 44(21): 9652-9669",
+            IF: "IF = 6.5",
+            point: "C核"
             pdfUrl: "papers/reservoir_diversity.pdf"   // 请修改为实际路径
         },
         {
             title: "中国立体绿化政策发展与量化评价",
             authors: "刘瑞雪, 李佳轩, 严仙友阳",
             journal: "中国城市林业",
-            year: "2025, 23(01): 179-187",
+            IF: "IF = 2.1",
             pdfUrl: "papers/green_policy.pdf"          // 请修改为实际路径
         }
     ];
 
-    // ================= 城市设计项目数据 =================
-    // 请将每个项目的 PDF 文件放入 pdfs/ 文件夹，并修改下面的 pdfUrl 路径
+    // ================= 城市设计项目数据（每个项目独立 emoji） =================
     const urbanProjects = [
         {
             title: "渔米",
             location: "广东省 · 中山市 · 南朗镇",
-            description: "滨水渔村振兴与生态景观设计",
-            pdfUrl: "pdfs/yumi.pdf"   // 请替换为实际PDF路径
+            description: "渔村振兴与生态景观设计",
+            pdfUrl: "pdfs/yumi.pdf",
+            emoji: "🎣"   // 渔
         },
         {
             title: "春雨桃花，淮北佳处",
             location: "江苏省 · 徐州市 · 新沂市",
-            description: "乡村文旅规划与景观营造",
-            pdfUrl: "pdfs/chunyu_taohua.pdf"
+            description: "乡村文旅与产业规划",
+            pdfUrl: "pdfs/chunyu_taohua.pdf",
+            emoji: "🌸"   // 桃花
         },
         {
             title: "文杏栽为梁，香茅结为宇",
             location: "江苏省 · 南京市 · 雨花台区",
-            description: "历史街区更新与公共空间设计",
-            pdfUrl: "pdfs/wenxing_xiangmao.pdf"
+            description: "城市新生活住宅设计",
+            pdfUrl: "pdfs/wenxing_xiangmao.pdf",
+            emoji: "🌳"   // 文杏香茅
         },
         {
             title: "新样小团龙",
             location: "江苏省 · 南京市 · 溧水区",
-            description: "文化地标与社区微更新",
-            pdfUrl: "pdfs/xinyang_tuanlong.pdf"
+            description: "文化公园与便民设施营造",
+            pdfUrl: "pdfs/xinyang_tuanlong.pdf",
+            emoji: "🐉"   // 团龙
         }
     ];
 
@@ -354,7 +358,7 @@
             for (let proj of urbanProjects) {
                 cardsHtml += `
                     <div class="project-card" data-pdf="${proj.pdfUrl}">
-                        <div class="project-title">🏙️ ${escapeHtml(proj.title)}</div>
+                        <div class="project-title">${proj.emoji} ${escapeHtml(proj.title)}</div>
                         <div class="project-location">📍 ${escapeHtml(proj.location)}</div>
                         <div class="project-desc">${escapeHtml(proj.description)}</div>
                         <div class="pdf-hint">
@@ -442,7 +446,7 @@
         const contentDiv = document.getElementById('moduleContent');
         if (contentDiv) {
             contentDiv.innerHTML = getModuleHTML(moduleName);
-            attachCardEvents();  // 绑定所有卡片的点击事件
+            attachCardEvents();
         }
         
         // 切换显示
