@@ -46,7 +46,6 @@
             padding-top: 0.5rem;
         }
 
-        /* 首页四大板块网格 */
         .home-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -90,7 +89,6 @@
             margin: 1rem 0 0.5rem;
         }
 
-        /* 模块顶部导航栏 */
         .module-nav {
             display: flex;
             flex-wrap: wrap;
@@ -122,7 +120,6 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
-        /* 模块内容区 */
         .module-content {
             background: white;
             border-radius: 28px;
@@ -131,7 +128,6 @@
             min-height: 500px;
         }
 
-        /* 通用卡片网格 */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -152,41 +148,65 @@
             box-shadow: 0 20px 30px -12px rgba(0,0,0,0.12);
             border-color: #cbd5e1;
         }
+        /* 字体层级 */
         .project-title {
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.25rem;
+            font-weight: 700;
             color: #0f172a;
             line-height: 1.4;
             margin-bottom: 0.5rem;
         }
-        .project-location {
+        .project-authors, .project-location {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 0.4rem;
+        }
+        .project-meta {
             font-size: 0.85rem;
-            color: #4b5563;
-            margin-bottom: 0.5rem;
+            color: #475569;
+            margin: 0.5rem 0;
             display: flex;
-            align-items: center;
-            gap: 0.3rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: baseline;
+        }
+        .project-journal {
+            font-weight: 500;
+        }
+        .project-if {
+            background: #eef2ff;
+            padding: 0.1rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #1e40af;
+        }
+        .project-year {
+            color: #5a6e7c;
         }
         .project-desc {
             font-size: 0.85rem;
-            color: #2d3a46;
-            margin: 0.5rem 0;
+            color: #4b5563;
             font-style: italic;
+            margin: 0.5rem 0;
         }
         .pdf-hint {
             margin-top: 1rem;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #7f8c8d;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            border-top: 1px solid #ecfdf5;
+            border-top: 1px solid #eef2ff;
             padding-top: 0.75rem;
+            text-align: center;
         }
-        .pdf-hint span {
-            background: #f1f5f9;
-            padding: 0.2rem 0.5rem;
-            border-radius: 30px;
+        .slow-tip {
+            font-size: 0.7rem;
+            color: #e67e22;
+            background: #fef3e2;
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            margin-top: 0.5rem;
         }
 
         .coming-soon {
@@ -223,7 +243,7 @@
         @media (max-width: 640px) {
             body { padding: 1rem; }
             .module-content { padding: 1.5rem; }
-            .project-title { font-size: 1rem; }
+            .project-title { font-size: 1.1rem; }
             .home-title { font-size: 1.4rem; }
             .welcome { font-size: 1.3rem; }
         }
@@ -263,7 +283,7 @@
         </div>
     </div>
 
-    <!-- 模块区域（含导航栏 + 内容，初始隐藏） -->
+    <!-- 模块区域 -->
     <div id="moduleArea" style="display: none;">
         <div class="module-nav" id="moduleNav">
             <button class="module-nav-btn" data-module="home">🏠 首页</button>
@@ -272,9 +292,7 @@
             <button class="module-nav-btn" data-module="photo">📸 摄影</button>
             <button class="module-nav-btn" data-module="sketch">✍️ 手绘</button>
         </div>
-        <div class="module-content" id="moduleContent">
-            <!-- 动态内容会填充到这里 -->
-        </div>
+        <div class="module-content" id="moduleContent"></div>
     </div>
 
     <div class="footer">
@@ -283,57 +301,68 @@
 </div>
 
 <script>
-    // ================= 论文数据 =================
+    // ================= 论文数据（含 IF 信息） =================
     const papersData = [
         {
             title: "水库消落带植物多样性空间格局预测模型及环境解释 —— 基于XGBoost-SHAP模型框架",
             authors: "刘瑞雪, 李佳轩, 李云",
             journal: "生态学报",
             year: "2024, 44(21): 9652-9669",
-            pdfUrl: "papers/reservoir_diversity.pdf"   // 请修改为实际路径
+            ifInfo: "IF=6.5, C核",
+            pdfUrl: "papers/reservoir_diversity.pdf"
         },
         {
             title: "中国立体绿化政策发展与量化评价",
             authors: "刘瑞雪, 李佳轩, 严仙友阳",
             journal: "中国城市林业",
             year: "2025, 23(01): 179-187",
-            pdfUrl: "papers/green_policy.pdf"          // 请修改为实际路径
+            ifInfo: "IF=2.1",
+            pdfUrl: "papers/green_policy.pdf"
         }
     ];
 
-    // ================= 城市设计项目数据（每个项目独立 emoji） =================
+    // ================= 城市设计项目数据 =================
     const urbanProjects = [
         {
             title: "渔米",
             location: "广东省 · 中山市 · 南朗镇",
             description: "渔村振兴与生态景观设计",
             pdfUrl: "pdfs/yumi.pdf",
-            emoji: "🎣"   // 渔
+            emoji: "🎣"
         },
         {
             title: "春雨桃花，淮北佳处",
             location: "江苏省 · 徐州市 · 新沂市",
             description: "乡村文旅与产业规划",
             pdfUrl: "pdfs/chunyu_taohua.pdf",
-            emoji: "🌸"   // 桃花
+            emoji: "🌸"
         },
         {
             title: "文杏栽为梁，香茅结为宇",
             location: "江苏省 · 南京市 · 雨花台区",
             description: "城市新生活住宅设计",
             pdfUrl: "pdfs/wenxing_xiangmao.pdf",
-            emoji: "🌳"   // 文杏香茅
+            emoji: "🌳"
         },
         {
             title: "新样小团龙",
             location: "江苏省 · 南京市 · 溧水区",
             description: "城市公共文化设施营造",
             pdfUrl: "pdfs/xinyang_tuanlong.pdf",
-            emoji: "🐉"   // 团龙
+            emoji: "🐉"
         }
     ];
 
-    // ================= 模块内容生成 =================
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
     function getModuleHTML(moduleName) {
         if (moduleName === 'paper') {
             let cardsHtml = `<div class="projects-grid">`;
@@ -341,10 +370,15 @@
                 cardsHtml += `
                     <div class="project-card" data-pdf="${p.pdfUrl}">
                         <div class="project-title">📄 ${escapeHtml(p.title)}</div>
-                        <div class="project-location">👥 ${escapeHtml(p.authors)}</div>
-                        <div class="project-desc">${escapeHtml(p.journal)} · ${escapeHtml(p.year)}</div>
+                        <div class="project-authors">👥 ${escapeHtml(p.authors)}</div>
+                        <div class="project-meta">
+                            <span class="project-journal">${escapeHtml(p.journal)}</span>
+                            <span class="project-if">${escapeHtml(p.ifInfo)}</span>
+                            <span class="project-year">${escapeHtml(p.year)}</span>
+                        </div>
                         <div class="pdf-hint">
                             <span>📄 点击卡片查看PDF全文</span>
+                            <div class="slow-tip">⏱️ 第一次打开卡片会有些慢，请耐心等待哦~</div>
                         </div>
                     </div>
                 `;
@@ -362,6 +396,7 @@
                         <div class="project-desc">${escapeHtml(proj.description)}</div>
                         <div class="pdf-hint">
                             <span>📄 点击卡片查看设计PDF</span>
+                            <div class="slow-tip">⏱️ 第一次打开卡片会有些慢，请耐心等待哦~</div>
                         </div>
                     </div>
                 `;
@@ -396,17 +431,6 @@
         return '<div class="coming-soon">内容加载中...</div>';
     }
 
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-
-    // 通用卡片点击打开 PDF
     function attachCardEvents() {
         const cards = document.querySelectorAll('.project-card');
         cards.forEach(card => {
@@ -425,13 +449,11 @@
         });
     }
 
-    // 显示模块视图
     function showModuleView(moduleName) {
         const homePage = document.getElementById('homePage');
         const moduleArea = document.getElementById('moduleArea');
         if (!homePage || !moduleArea) return;
         
-        // 更新导航栏激活状态
         const navBtns = document.querySelectorAll('.module-nav-btn');
         navBtns.forEach(btn => {
             if (btn.getAttribute('data-module') === moduleName) {
@@ -441,19 +463,16 @@
             }
         });
         
-        // 渲染模块内容
         const contentDiv = document.getElementById('moduleContent');
         if (contentDiv) {
             contentDiv.innerHTML = getModuleHTML(moduleName);
             attachCardEvents();
         }
         
-        // 切换显示
         homePage.style.display = 'none';
         moduleArea.style.display = 'block';
     }
 
-    // 返回首页
     function showHome() {
         const homePage = document.getElementById('homePage');
         const moduleArea = document.getElementById('moduleArea');
@@ -463,9 +482,7 @@
         }
     }
 
-    // 初始化
     function init() {
-        // 首页卡片点击
         const cards = document.querySelectorAll('.home-card');
         cards.forEach(card => {
             card.addEventListener('click', () => {
@@ -474,7 +491,6 @@
             });
         });
         
-        // 导航栏按钮点击
         const navBtns = document.querySelectorAll('.module-nav-btn');
         navBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -487,7 +503,6 @@
             });
         });
         
-        // 初始显示首页
         document.getElementById('homePage').style.display = 'block';
         document.getElementById('moduleArea').style.display = 'none';
     }
