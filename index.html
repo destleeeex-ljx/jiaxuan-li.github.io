@@ -258,7 +258,7 @@
     <div class="footer">© 李佳轩 · Portfolio</div>
 </div>
 
-<!-- PDF 在线预览弹窗 - 使用 PDF.js 官方阅读器，支持翻书效果 -->
+<!-- PDF 在线预览弹窗（使用浏览器原生 PDF 阅读器，支持翻页、缩放） -->
 <div id="pdfModal" class="pdf-modal">
     <div class="pdf-modal-content">
         <span class="close-btn">&times;</span>
@@ -349,14 +349,12 @@
         return '';
     }
 
-    // 使用 PDF.js 官方 viewer 实现完美在线预览（支持翻页、缩放、双页视图）
+    // 使用浏览器原生 PDF 阅读器（通过 iframe 嵌入 PDF，自动提供翻页、缩放等功能）
     function openPdfInViewer(pdfUrl) {
         const modal = document.getElementById('pdfModal');
         const iframe = document.getElementById('pdfIframe');
-        // 官方 PDF.js viewer 地址（稳定版），通过 file 参数传递 PDF 链接
-        // 使用 Cloudflare CDN 加速，确保跨域和可用性
-        const viewerUrl = `https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/web/viewer.html?file=${encodeURIComponent(pdfUrl)}`;
-        iframe.src = viewerUrl;
+        // 直接让 iframe 加载 PDF，浏览器会显示内置阅读器（支持翻页、缩略图、双页模式）
+        iframe.src = pdfUrl;
         modal.style.display = 'block';
     }
 
