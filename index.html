@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>李佳轩 · 作品集</title>
     <style>
         * {
@@ -10,20 +10,16 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background: #f5f7fb;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.5;
-            color: #1e2a3a;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             padding: 2rem 1rem;
+            color: #1e2a3a;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
-
         .header {
             text-align: center;
             margin-bottom: 2rem;
@@ -31,7 +27,6 @@
         .name {
             font-size: 2.2rem;
             font-weight: 600;
-            letter-spacing: -0.5px;
             background: linear-gradient(135deg, #1e2a3a, #2c3e50);
             background-clip: text;
             -webkit-background-clip: text;
@@ -40,13 +35,10 @@
         .tagline {
             font-size: 1rem;
             color: #5a6e7c;
-            margin-top: 0.5rem;
             border-top: 1px solid #e2e8f0;
             display: inline-block;
             padding-top: 0.5rem;
         }
-
-        /* 首页四大板块网格 */
         .home-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -59,173 +51,85 @@
             padding: 2rem 1.5rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05), 0 0 0 1px #f0f2f5;
+            transition: 0.2s;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05);
             border: 1px solid #edf2f7;
         }
         .home-card:hover {
             transform: translateY(-6px);
             box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15);
-            border-color: #cbd5e1;
         }
         .home-emoji {
             font-size: 3.5rem;
-            margin-bottom: 1rem;
         }
         .home-title {
             font-size: 1.8rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #1e2a3a;
-        }
-        .home-desc {
-            font-size: 0.9rem;
-            color: #5a6e7c;
+            margin: 0.5rem 0;
         }
         .welcome {
             text-align: center;
             font-size: 1.6rem;
-            font-weight: 500;
-            color: #2c3e50;
-            margin: 1rem 0 0.5rem;
+            margin: 1rem 0;
         }
-
-        /* 模块顶部导航栏 */
         .module-nav {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
             gap: 0.75rem;
+            justify-content: center;
             margin-bottom: 2rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
         }
         .module-nav-btn {
             background: transparent;
             border: none;
             padding: 0.5rem 1.2rem;
-            font-size: 0.95rem;
-            font-weight: 500;
             border-radius: 40px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            color: #4a5b6e;
-            font-family: inherit;
-        }
-        .module-nav-btn:hover {
-            background: #e9edf2;
-            color: #1e2a3a;
+            font-size: 0.95rem;
         }
         .module-nav-btn.active {
             background: #1e2a3a;
             color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-
-        /* 模块内容区 */
         .module-content {
             background: white;
             border-radius: 28px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.05);
-            padding: 2rem 1.8rem;
+            padding: 2rem;
             min-height: 500px;
         }
-
-        /* 通用卡片网格 */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
-            margin-top: 1rem;
         }
         .project-card {
-            background: #ffffff;
+            background: white;
             border-radius: 24px;
             padding: 1.5rem;
-            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05), 0 0 0 1px #f0f2f5;
             cursor: pointer;
-            transition: all 0.25s ease;
             border: 1px solid #edf2f7;
+            transition: 0.2s;
         }
         .project-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.12);
-            border-color: #cbd5e1;
-        }
-        .project-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #0f172a;
-            line-height: 1.4;
-            margin-bottom: 0.5rem;
-        }
-        .project-location {
-            font-size: 0.85rem;
-            color: #4b5563;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-        .project-desc {
-            font-size: 0.85rem;
-            color: #2d3a46;
-            margin: 0.5rem 0;
-            font-style: italic;
+            box-shadow: 0 12px 20px -8px rgba(0,0,0,0.1);
         }
         .pdf-hint {
             margin-top: 1rem;
             font-size: 0.75rem;
             color: #7f8c8d;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            border-top: 1px solid #ecfdf5;
+            border-top: 1px solid #eef2ff;
             padding-top: 0.75rem;
         }
-        .pdf-hint span {
-            background: #f1f5f9;
-            padding: 0.2rem 0.5rem;
-            border-radius: 30px;
-        }
-
         .coming-soon {
             text-align: center;
-            padding: 3rem 1rem;
+            padding: 3rem;
             color: #94a3b8;
-            font-size: 1.1rem;
         }
-        .placeholder-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-        .placeholder-item {
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            flex: 1;
-            min-width: 150px;
-            color: #475569;
-            border: 1px dashed #cbd5e1;
-        }
-
         .footer {
             text-align: center;
             margin-top: 2rem;
             font-size: 0.75rem;
-            color: #7c8b9c;
-        }
-
-        @media (max-width: 640px) {
-            body { padding: 1rem; }
-            .module-content { padding: 1.5rem; }
-            .project-title { font-size: 1rem; }
-            .home-title { font-size: 1.4rem; }
-            .welcome { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -236,165 +140,70 @@
         <div class="tagline">城市规划 | 生态环境 | 设计研究</div>
     </div>
 
-    <!-- 首页：四大板块 -->
     <div id="homePage">
         <div class="welcome">✨ 您希望从哪里了解我？ ✨</div>
         <div class="home-grid">
-            <div class="home-card" data-module="paper">
-                <div class="home-emoji">📄</div>
-                <div class="home-title">论文</div>
-                <div class="home-desc">学术研究成果 · 已发表论文</div>
-            </div>
-            <div class="home-card" data-module="urban">
-                <div class="home-emoji">🏙️</div>
-                <div class="home-title">城市设计</div>
-                <div class="home-desc">设计作品 · 城市 / 乡村</div>
-            </div>
-            <div class="home-card" data-module="photo">
-                <div class="home-emoji">📸</div>
-                <div class="home-title">摄影</div>
-                <div class="home-desc">城市 · 自然 · 人文影像</div>
-            </div>
-            <div class="home-card" data-module="sketch">
-                <div class="home-emoji">✍️</div>
-                <div class="home-title">手绘</div>
-                <div class="home-desc">钢笔淡彩 · 马克笔表现</div>
-            </div>
+            <div class="home-card" data-module="paper"><div class="home-emoji">📄</div><div class="home-title">论文</div><div>学术研究成果 · 已发表论文</div></div>
+            <div class="home-card" data-module="urban"><div class="home-emoji">🏙️</div><div class="home-title">城市设计</div><div>设计作品 · 城市 / 乡村</div></div>
+            <div class="home-card" data-module="photo"><div class="home-emoji">📸</div><div class="home-title">摄影</div><div>城市 · 自然 · 人文影像</div></div>
+            <div class="home-card" data-module="sketch"><div class="home-emoji">✍️</div><div class="home-title">手绘</div><div>钢笔淡彩 · 马克笔表现</div></div>
         </div>
     </div>
 
-    <!-- 模块区域（含导航栏 + 内容，初始隐藏） -->
     <div id="moduleArea" style="display: none;">
-        <div class="module-nav" id="moduleNav">
+        <div class="module-nav">
             <button class="module-nav-btn" data-module="home">🏠 首页</button>
             <button class="module-nav-btn" data-module="paper">📄 论文</button>
             <button class="module-nav-btn" data-module="urban">🏙️ 城市设计</button>
             <button class="module-nav-btn" data-module="photo">📸 摄影</button>
             <button class="module-nav-btn" data-module="sketch">✍️ 手绘</button>
         </div>
-        <div class="module-content" id="moduleContent">
-            <!-- 动态内容会填充到这里 -->
-        </div>
+        <div class="module-content" id="moduleContent"></div>
     </div>
 
-    <div class="footer">
-        © 李佳轩 · Portfolio
-    </div>
+    <div class="footer">© 李佳轩 · Portfolio</div>
 </div>
 
 <script>
-    // ================= 论文数据 =================
+    // 论文数据（请修改为实际PDF路径）
     const papersData = [
-        {
-            title: "水库消落带植物多样性空间格局预测模型及环境解释 —— 基于XGBoost-SHAP模型框架",
-            authors: "刘瑞雪, 李佳轩, 李云",
-            journal: "生态学报",
-            IF: "IF = 6.5",
-            point: "C核"
-            pdfUrl: "papers/reservoir_diversity.pdf"   // 请修改为实际路径
-        },
-        {
-            title: "中国立体绿化政策发展与量化评价",
-            authors: "刘瑞雪, 李佳轩, 严仙友阳",
-            journal: "中国城市林业",
-            IF: "IF = 2.1",
-            pdfUrl: "papers/green_policy.pdf"          // 请修改为实际路径
-        }
+        { title: "水库消落带植物多样性空间格局预测模型", authors: "刘瑞雪, 李佳轩, 李云", journal: "生态学报", year: "2024", pdfUrl: "papers/reservoir_diversity.pdf" },
+        { title: "中国立体绿化政策发展与量化评价", authors: "刘瑞雪, 李佳轩, 严仙友阳", journal: "中国城市林业", year: "2025", pdfUrl: "papers/green_policy.pdf" }
     ];
 
-    // ================= 城市设计项目数据（每个项目独立 emoji） =================
+    // 城市设计项目
     const urbanProjects = [
-        {
-            title: "渔米",
-            location: "广东省 · 中山市 · 南朗镇",
-            description: "渔村振兴与生态景观设计",
-            pdfUrl: "pdfs/yumi.pdf",
-            emoji: "🎣"   // 渔
-        },
-        {
-            title: "春雨桃花，淮北佳处",
-            location: "江苏省 · 徐州市 · 新沂市",
-            description: "乡村文旅与产业规划",
-            pdfUrl: "pdfs/chunyu_taohua.pdf",
-            emoji: "🌸"   // 桃花
-        },
-        {
-            title: "文杏栽为梁，香茅结为宇",
-            location: "江苏省 · 南京市 · 雨花台区",
-            description: "城市新生活住宅设计",
-            pdfUrl: "pdfs/wenxing_xiangmao.pdf",
-            emoji: "🌳"   // 文杏香茅
-        },
-        {
-            title: "新样小团龙",
-            location: "江苏省 · 南京市 · 溧水区",
-            description: "文化公园与便民设施营造",
-            pdfUrl: "pdfs/xinyang_tuanlong.pdf",
-            emoji: "🐉"   // 团龙
-        }
+        { title: "🎣 渔米", location: "广东省 · 中山市 · 南朗镇", desc: "渔村振兴与生态景观设计", pdfUrl: "pdfs/yumi.pdf" },
+        { title: "🌸 春雨桃花，淮北佳处", location: "江苏省 · 徐州市 · 新沂市", desc: "乡村文旅与产业规划", pdfUrl: "pdfs/chunyu_taohua.pdf" },
+        { title: "🌳 文杏栽为梁，香茅结为宇", location: "江苏省 · 南京市 · 雨花台区", desc: "城市新生活住宅设计", pdfUrl: "pdfs/wenxing_xiangmao.pdf" },
+        { title: "🐉 新样小团龙", location: "江苏省 · 南京市 · 溧水区", desc: "文化公共空间营造", pdfUrl: "pdfs/xinyang_tuanlong.pdf" }
     ];
 
-    // ================= 模块内容生成 =================
-    function getModuleHTML(moduleName) {
-        if (moduleName === 'paper') {
-            let cardsHtml = `<div class="projects-grid">`;
-            for (let p of papersData) {
-                cardsHtml += `
-                    <div class="project-card" data-pdf="${p.pdfUrl}">
-                        <div class="project-title">📄 ${escapeHtml(p.title)}</div>
-                        <div class="project-location">👥 ${escapeHtml(p.authors)}</div>
-                        <div class="project-desc">${escapeHtml(p.journal)} · ${escapeHtml(p.year)}</div>
-                        <div class="pdf-hint">
-                            <span>📄 点击卡片查看PDF全文</span>
-                        </div>
-                    </div>
-                `;
-            }
-            cardsHtml += `</div>`;
-            return cardsHtml;
-        } 
-        else if (moduleName === 'urban') {
-            let cardsHtml = `<div class="projects-grid">`;
-            for (let proj of urbanProjects) {
-                cardsHtml += `
-                    <div class="project-card" data-pdf="${proj.pdfUrl}">
-                        <div class="project-title">${proj.emoji} ${escapeHtml(proj.title)}</div>
-                        <div class="project-location">📍 ${escapeHtml(proj.location)}</div>
-                        <div class="project-desc">${escapeHtml(proj.description)}</div>
-                        <div class="pdf-hint">
-                            <span>📄 点击卡片查看设计PDF</span>
-                        </div>
-                    </div>
-                `;
-            }
-            cardsHtml += `</div>`;
-            return cardsHtml;
+    function getModuleHTML(module) {
+        if (module === 'paper') {
+            return '<div class="projects-grid">' + papersData.map(function(p) {
+                return '<div class="project-card" data-pdf="' + p.pdfUrl + '">' +
+                    '<div><strong>📄 ' + escapeHtml(p.title) + '</strong></div>' +
+                    '<div>👥 ' + escapeHtml(p.authors) + '</div>' +
+                    '<div>' + escapeHtml(p.journal) + ' · ' + escapeHtml(p.year) + '</div>' +
+                    '<div class="pdf-hint">📄 点击卡片查看PDF</div>' +
+                    '</div>';
+            }).join('') + '</div>';
+        } else if (module === 'urban') {
+            return '<div class="projects-grid">' + urbanProjects.map(function(p) {
+                return '<div class="project-card" data-pdf="' + p.pdfUrl + '">' +
+                    '<div><strong>' + escapeHtml(p.title) + '</strong></div>' +
+                    '<div>📍 ' + escapeHtml(p.location) + '</div>' +
+                    '<div>' + escapeHtml(p.desc) + '</div>' +
+                    '<div class="pdf-hint">📄 点击卡片查看设计PDF</div>' +
+                    '</div>';
+            }).join('') + '</div>';
+        } else if (module === 'sketch') {
+            return '<div class="coming-soon">✍️ 手绘模块 · 建设中</div>';
+        } else if (module === 'photo') {
+            return '<div class="coming-soon">📸 摄影模块 · 建设中</div>';
         }
-        else if (moduleName === 'sketch') {
-            return `
-                <div class="coming-soon">
-                    ✍️ 手绘模块 · 速写/建筑/景观手绘<br>
-                    <div class="placeholder-grid">
-                        <div class="placeholder-item">钢笔淡彩</div>
-                        <div class="placeholder-item">马克笔表现</div>
-                    </div>
-                    <p style="margin-top:1rem; font-size:0.85rem;">手绘作品扫描整理中，敬请期待</p>
-                </div>
-            `;
-        }
-        else if (moduleName === 'photo') {
-            return `
-                <div class="coming-soon">
-                    📸 摄影模块 · 城市/自然/人文<br>
-                    <div class="placeholder-grid">
-                        <div class="placeholder-item">城市天际线</div>
-                        <div class="placeholder-item">生态纪实</div>
-                    </div>
-                    <p style="margin-top:1rem; font-size:0.85rem;">摄影集即将上线</p>
-                </div>
-            `;
-        }
-        return '<div class="coming-soon">内容加载中...</div>';
+        return '';
     }
 
     function escapeHtml(str) {
@@ -407,93 +216,57 @@
         });
     }
 
-    // 通用卡片点击打开 PDF
     function attachCardEvents() {
-        const cards = document.querySelectorAll('.project-card');
-        cards.forEach(card => {
-            card.removeEventListener('click', card._handler);
-            const pdfPath = card.getAttribute('data-pdf');
-            const handler = (e) => {
-                e.stopPropagation();
-                if (pdfPath && pdfPath.trim() !== '' && !pdfPath.includes('placeholder')) {
-                    window.open(pdfPath, '_blank');
-                } else {
-                    alert('📄 PDF 文件路径未配置。请检查对应项目的 pdfUrl，并确保 PDF 文件已上传到正确的文件夹。');
-                }
+        var cards = document.querySelectorAll('.project-card');
+        for (var i = 0; i < cards.length; i++) {
+            var card = cards[i];
+            var oldHandler = card._handler;
+            if (oldHandler) card.removeEventListener('click', oldHandler);
+            var url = card.getAttribute('data-pdf');
+            var handler = function(e) {
+                var pdfUrl = this.getAttribute('data-pdf');
+                if (pdfUrl) window.open(pdfUrl, '_blank');
+                else alert('PDF路径未配置');
             };
             card.addEventListener('click', handler);
             card._handler = handler;
-        });
-    }
-
-    // 显示模块视图
-    function showModuleView(moduleName) {
-        const homePage = document.getElementById('homePage');
-        const moduleArea = document.getElementById('moduleArea');
-        if (!homePage || !moduleArea) return;
-        
-        // 更新导航栏激活状态
-        const navBtns = document.querySelectorAll('.module-nav-btn');
-        navBtns.forEach(btn => {
-            if (btn.getAttribute('data-module') === moduleName) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-        
-        // 渲染模块内容
-        const contentDiv = document.getElementById('moduleContent');
-        if (contentDiv) {
-            contentDiv.innerHTML = getModuleHTML(moduleName);
-            attachCardEvents();
         }
-        
-        // 切换显示
-        homePage.style.display = 'none';
-        moduleArea.style.display = 'block';
     }
 
-    // 返回首页
+    function showModule(moduleName) {
+        document.getElementById('homePage').style.display = 'none';
+        document.getElementById('moduleArea').style.display = 'block';
+        document.getElementById('moduleContent').innerHTML = getModuleHTML(moduleName);
+        attachCardEvents();
+        var btns = document.querySelectorAll('.module-nav-btn');
+        for (var i = 0; i < btns.length; i++) {
+            var btn = btns[i];
+            if (btn.getAttribute('data-module') === moduleName) btn.classList.add('active');
+            else btn.classList.remove('active');
+        }
+    }
+
     function showHome() {
-        const homePage = document.getElementById('homePage');
-        const moduleArea = document.getElementById('moduleArea');
-        if (homePage && moduleArea) {
-            homePage.style.display = 'block';
-            moduleArea.style.display = 'none';
-        }
-    }
-
-    // 初始化
-    function init() {
-        // 首页卡片点击
-        const cards = document.querySelectorAll('.home-card');
-        cards.forEach(card => {
-            card.addEventListener('click', () => {
-                const module = card.getAttribute('data-module');
-                if (module) showModuleView(module);
-            });
-        });
-        
-        // 导航栏按钮点击
-        const navBtns = document.querySelectorAll('.module-nav-btn');
-        navBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const module = btn.getAttribute('data-module');
-                if (module === 'home') {
-                    showHome();
-                } else {
-                    showModuleView(module);
-                }
-            });
-        });
-        
-        // 初始显示首页
         document.getElementById('homePage').style.display = 'block';
         document.getElementById('moduleArea').style.display = 'none';
     }
-    
-    init();
+
+    var homeCards = document.querySelectorAll('.home-card');
+    for (var i = 0; i < homeCards.length; i++) {
+        homeCards[i].addEventListener('click', function(e) {
+            var module = this.getAttribute('data-module');
+            if (module) showModule(module);
+        });
+    }
+
+    var navBtns = document.querySelectorAll('.module-nav-btn');
+    for (var i = 0; i < navBtns.length; i++) {
+        navBtns[i].addEventListener('click', function(e) {
+            var module = this.getAttribute('data-module');
+            if (module === 'home') showHome();
+            else if (module) showModule(module);
+        });
+    }
 </script>
 </body>
 </html>
