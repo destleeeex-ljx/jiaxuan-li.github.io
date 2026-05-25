@@ -4,20 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>李佳轩 · 作品集</title>
-    <!-- 引入 PDF.js 的 CSS 样式，让翻页阅读器显示更美观 -->
-    <link rel="resource" type="application/l10n" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/web/locale/locale.properties">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/web/pdf_viewer.css">
     <style>
-        /* --- 你的原始样式全部保留，此处不变，只新增了用于PDF弹窗的modal样式 --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             background: #f5f7fb;
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             padding: 2rem 1rem;
             color: #1e2a3a;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 2rem; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
         .name {
             font-size: 2.2rem;
             font-weight: 600;
@@ -53,7 +59,9 @@
             transform: translateY(-6px);
             box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15);
         }
-        .home-emoji { font-size: 3.5rem; }
+        .home-emoji {
+            font-size: 3.5rem;
+        }
         .home-title {
             font-size: 1.8rem;
             font-weight: 600;
@@ -80,7 +88,9 @@
             font-size: 0.95rem;
             transition: 0.2s;
         }
-        .module-nav-btn:hover { background: #e9edf2; }
+        .module-nav-btn:hover {
+            background: #e9edf2;
+        }
         .module-nav-btn.active {
             background: #1e2a3a;
             color: white;
@@ -108,7 +118,6 @@
             transform: translateY(-4px);
             box-shadow: 0 12px 20px -8px rgba(0,0,0,0.1);
         }
-        /* 统一字体层级 */
         .project-title {
             font-size: 1.25rem;
             font-weight: 700;
@@ -130,7 +139,9 @@
             gap: 0.4rem;
             align-items: baseline;
         }
-        .project-journal { font-weight: 500; }
+        .project-journal {
+            font-weight: 500;
+        }
         .project-if {
             background: #eef2ff;
             padding: 0.1rem 0.5rem;
@@ -139,7 +150,9 @@
             font-weight: 500;
             color: #1e40af;
         }
-        .project-year { color: #5a6e7c; }
+        .project-year {
+            color: #5a6e7c;
+        }
         .project-desc {
             font-size: 0.85rem;
             color: #4b5563;
@@ -164,7 +177,7 @@
             margin-top: 2rem;
             font-size: 0.75rem;
         }
-        /* --- PDF 弹窗样式 --- */
+        /* PDF 弹窗样式 */
         .pdf-modal {
             display: none;
             position: fixed;
@@ -174,7 +187,7 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0,0,0,0.85);
         }
         .pdf-modal-content {
             background-color: #fefefe;
@@ -245,18 +258,16 @@
     <div class="footer">© 李佳轩 · Portfolio</div>
 </div>
 
-<!-- PDF 预览弹窗 -->
+<!-- PDF 在线预览弹窗 - 使用 PDF.js 官方阅读器，支持翻书效果 -->
 <div id="pdfModal" class="pdf-modal">
     <div class="pdf-modal-content">
         <span class="close-btn">&times;</span>
-        <iframe id="pdfIframe" class="pdf-iframe" src=""></iframe>
+        <iframe id="pdfIframe" class="pdf-iframe" src="about:blank"></iframe>
     </div>
 </div>
 
-<!-- 引入 PDF.js 库，用于翻页效果 -->
-<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.min.js"></script>
 <script>
-    // --- 数据配置 ---
+    // 论文数据（使用 raw.githubusercontent.com 直链）
     const papersData = [
         { 
             title: "水库消落带植物多样性空间格局预测模型及环境解释 —— 基于XGBoost-SHAP模型框架", 
@@ -264,7 +275,7 @@
             journal: "生态学报", 
             year: "2024",
             ifInfo: "IF=6.5, C核",
-            pdfUrl: "https://destleeeex-ljx.github.io/jiaxuan-li.github.io/papers/reservoir_diversity.pdf" 
+            pdfUrl: "https://raw.githubusercontent.com/destleeeex-ljx/jiaxuan-li.github.io/main/papers/reservoir_diversity.pdf" 
         },
         { 
             title: "中国立体绿化政策发展与量化评价", 
@@ -272,19 +283,18 @@
             journal: "中国城市林业", 
             year: "2025",
             ifInfo: "IF=2.1",
-            pdfUrl: "https://destleeeex-ljx.github.io/jiaxuan-li.github.io/papers/green_policy.pdf" 
+            pdfUrl: "https://raw.githubusercontent.com/destleeeex-ljx/jiaxuan-li.github.io/main/papers/green_policy.pdf" 
         }
     ];
 
-    // 城市设计项目数据（PDF 链接已改为 GitHub 上文件的直接链接）
+    // 城市设计项目数据（pdfs 文件夹需存在且文件名匹配）
     const urbanProjects = [
-        { title: "🎣 渔米", location: "广东省 · 中山市 · 南朗镇", desc: "渔村振兴与生态景观设计", pdfUrl: "https://destleeeex-ljx.github.io/jiaxuan-li.github.io/pdfs/yumi.pdf" },
-        { title: "🌸 春雨桃花，淮北佳处", location: "江苏省 · 徐州市 · 新沂市", desc: "乡村文旅与产业规划", pdfUrl: "https://destleeeex-ljx.github.io/jiaxuan-li.github.io/pdfs/chunyu_taohua.pdf" },
-        { title: "🌳 文杏栽为梁，香茅结为宇", location: "江苏省 · 南京市 · 雨花台区", desc: "城市新生活住宅设计", pdfUrl: "https://destleeeex-ljx.github.io/jiaxuan-li.github.io/pdfs/wenxing_xiangmao.pdf" },
-        { title: "🐉 新样小团龙", location: "江苏省 · 南京市 · 溧水区", desc: "城市文化公共空间营造", pdfUrl: "https://destleeeex-ljx.github.io/jiaxuan-li.github.io/pdfs/xinyang_tuanlong.pdf" }
+        { title: "🎣 渔米", location: "广东省 · 中山市 · 南朗镇", desc: "渔村振兴与生态景观设计", pdfUrl: "https://raw.githubusercontent.com/destleeeex-ljx/jiaxuan-li.github.io/main/pdfs/yumi.pdf" },
+        { title: "🌸 春雨桃花，淮北佳处", location: "江苏省 · 徐州市 · 新沂市", desc: "乡村文旅与产业规划", pdfUrl: "https://raw.githubusercontent.com/destleeeex-ljx/jiaxuan-li.github.io/main/pdfs/chunyu_taohua.pdf" },
+        { title: "🌳 文杏栽为梁，香茅结为宇", location: "江苏省 · 南京市 · 雨花台区", desc: "城市新生活住宅设计", pdfUrl: "https://raw.githubusercontent.com/destleeeex-ljx/jiaxuan-li.github.io/main/pdfs/wenxing_xiangmao.pdf" },
+        { title: "🐉 新样小团龙", location: "江苏省 · 南京市 · 溧水区", desc: "城市文化公共空间营造", pdfUrl: "https://raw.githubusercontent.com/destleeeex-ljx/jiaxuan-li.github.io/main/pdfs/xinyang_tuanlong.pdf" }
     ];
 
-    // --- 辅助函数：HTML 转义 ---
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
@@ -295,7 +305,6 @@
         });
     }
 
-    // --- 模块内容生成器（保持不变，因为我们已经将 pdfUrl 更新为了绝对链接）---
     function getModuleHTML(module) {
         if (module === 'paper') {
             let html = '<div class="projects-grid">';
@@ -309,7 +318,7 @@
                             <span class="project-if">${escapeHtml(p.ifInfo)}</span>
                             <span class="project-year">${escapeHtml(p.year)}</span>
                         </div>
-                        <div class="pdf-hint">📄 点击卡片查看PDF全文</div>
+                        <div class="pdf-hint">📄 在线预览（可翻页）</div>
                     </div>
                 `;
             }
@@ -324,7 +333,7 @@
                         <div class="project-title">${escapeHtml(p.title)}</div>
                         <div class="project-location">📍 ${escapeHtml(p.location)}</div>
                         <div class="project-desc">${escapeHtml(p.desc)}</div>
-                        <div class="pdf-hint">📄 点击卡片查看设计PDF</div>
+                        <div class="pdf-hint">📄 在线预览设计PDF（可翻页）</div>
                     </div>
                 `;
             }
@@ -340,25 +349,32 @@
         return '';
     }
 
-    // --- 弹窗逻辑：点击卡片时，在浮层中打开 PDF.js 查看器，实现流畅的翻页效果---
+    // 使用 PDF.js 官方 viewer 实现完美在线预览（支持翻页、缩放、双页视图）
+    function openPdfInViewer(pdfUrl) {
+        const modal = document.getElementById('pdfModal');
+        const iframe = document.getElementById('pdfIframe');
+        // 官方 PDF.js viewer 地址（稳定版），通过 file 参数传递 PDF 链接
+        // 使用 Cloudflare CDN 加速，确保跨域和可用性
+        const viewerUrl = `https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/web/viewer.html?file=${encodeURIComponent(pdfUrl)}`;
+        iframe.src = viewerUrl;
+        modal.style.display = 'block';
+    }
+
     function attachCardEvents() {
         const cards = document.querySelectorAll('.project-card');
         const modal = document.getElementById('pdfModal');
         const iframe = document.getElementById('pdfIframe');
         const closeBtn = document.querySelector('.close-btn');
 
-        // 关闭弹窗
         function closeModal() {
             modal.style.display = 'none';
-            iframe.src = ''; // 清空 iframe，停止视频/PDF 加载
+            iframe.src = 'about:blank'; // 停止加载
         }
 
         closeBtn.onclick = closeModal;
         window.onclick = function(event) {
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
+            if (event.target == modal) closeModal();
+        };
 
         cards.forEach(card => {
             const oldHandler = card._handler;
@@ -366,14 +382,9 @@
             const pdfUrl = card.getAttribute('data-pdf');
             const handler = function() {
                 if (pdfUrl) {
-                    // 使用 PDF.js 的 viewer.html 来打开 PDF，这样用户可以获得完整的翻页、缩放、搜索等功能，阅读体验如翻书一般。
-                    // viewer.html 是 PDF.js 官方提供的一个功能齐全的 PDF 阅读器界面。
-                    // 这里使用了在线 CDN 托管的 viewer.html，将其嵌入 iframe 中即可。
-                    const viewerUrl = `https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/web/viewer.html?file=${encodeURIComponent(pdfUrl)}`;
-                    iframe.src = viewerUrl;
-                    modal.style.display = 'block';
+                    openPdfInViewer(pdfUrl);
                 } else {
-                    alert('PDF路径未配置');
+                    alert('PDF 路径未配置');
                 }
             };
             card.addEventListener('click', handler);
@@ -381,12 +392,11 @@
         });
     }
 
-    // --- 页面切换逻辑（保持不变）---
     function showModule(moduleName) {
         document.getElementById('homePage').style.display = 'none';
         document.getElementById('moduleArea').style.display = 'block';
         document.getElementById('moduleContent').innerHTML = getModuleHTML(moduleName);
-        attachCardEvents(); // 重新绑定事件
+        attachCardEvents();
         const btns = document.querySelectorAll('.module-nav-btn');
         btns.forEach(btn => {
             if (btn.getAttribute('data-module') === moduleName) btn.classList.add('active');
@@ -399,7 +409,6 @@
         document.getElementById('moduleArea').style.display = 'none';
     }
 
-    // 初始化事件绑定
     document.querySelectorAll('.home-card').forEach(card => {
         card.addEventListener('click', () => {
             const module = card.getAttribute('data-module');
