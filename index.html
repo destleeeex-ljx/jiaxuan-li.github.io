@@ -39,7 +39,50 @@
         .placeholder-grid { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 1rem; }
         .placeholder-item { background: #f8fafc; border-radius: 20px; padding: 2rem; text-align: center; flex: 1; min-width: 150px; color: #475569; border: 1px dashed #cbd5e1; }
         .footer { text-align: center; margin-top: 2rem; font-size: 0.75rem; color: #7c8b9c; }
-        /* 图片弹窗样式 */
+
+        /* 摄影模块 - 瀑布流样式 */
+        .masonry {
+            column-count: 3;
+            column-gap: 1.5rem;
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .masonry-item:hover {
+            transform: translateY(-4px);
+        }
+        .masonry-item img {
+            width: 100%;
+            border-radius: 20px;
+            display: block;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+            transition: box-shadow 0.2s;
+        }
+        .masonry-item img:hover {
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+        .masonry-caption {
+            padding: 0.5rem 0.5rem 0 0.5rem;
+            font-size: 0.8rem;
+            color: #4b5563;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .masonry {
+                column-count: 2;
+            }
+        }
+        @media (max-width: 480px) {
+            .masonry {
+                column-count: 1;
+            }
+        }
+
+        /* 图片弹窗样式（复用，增加摄影专用关闭逻辑） */
         .image-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); overflow: auto; }
         .image-modal-content { position: relative; margin: auto; top: 50%; transform: translateY(-50%); max-width: 90%; max-height: 90%; text-align: center; }
         .image-modal-content img { max-width: 100%; max-height: 80vh; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.3); }
@@ -84,11 +127,11 @@
     <div class="footer">© 李佳轩 · Portfolio</div>
 </div>
 
-<!-- 图片预览模态框 -->
+<!-- 全局图片预览模态框（复用） -->
 <div id="imageModal" class="image-modal">
     <span class="close-modal">&times;</span>
     <div class="image-modal-content">
-        <img id="modalImage" src="" alt="设计图">
+        <img id="modalImage" src="" alt="预览">
         <button id="prevBtn" class="nav-btn prev-btn">❮</button>
         <button id="nextBtn" class="nav-btn next-btn">❯</button>
         <button id="backBtn" class="back-to-urban" style="display: none;">← 返回城市设计模块</button>
@@ -96,7 +139,7 @@
 </div>
 
 <script>
-    // ================= 论文数据（保持原样） =================
+    // ================= 论文数据 =================
     const papersData = [
         {
             title: "水库消落带植物多样性空间格局预测模型及环境解释 —— 基于XGBoost-SHAP模型框架",
@@ -116,7 +159,7 @@
         }
     ];
 
-    // ================= 城市设计项目数据（图片路径为 designjpgs 文件夹） =================
+    // ================= 城市设计项目数据 =================
     const urbanProjects = [
         {
             title: "渔米",
@@ -170,10 +213,24 @@
         }
     ];
 
-    // 图片浏览逻辑
-    let currentImageList = [];
+    // ================= 摄影模块数据（6张图片，瀑布流） =================
+    // 请将您的摄影作品放入 photography/ 文件夹，命名为 1.jpg ~ 6.jpg，或修改下方路径
+    const photoItems = [
+        { src: "photography/1.jpg", caption: "寄畅 · 无锡" },
+        { src: "photography/2.jpg", caption: "太平山顶 · 香港" },
+        { src: "photography/3.jpg", caption: "交汇 · 上海" },
+        { src: "photography/4.jpg", caption: "孤舟 · 深圳" },
+        { src: "photography/5.jpg", caption: "湾区之眼 · 深圳" },
+        { src: "photography/6.jpg", caption: "或许你喜欢吃东西吗" }
+    ];
+
+    // 图片浏览逻辑（复用全局变量，但避免与城市设计冲突，我们使用单独的模态框控制）
+    let currentImageList = [];     // 当前图片列表（城市设计用）
     let currentIndex = 0;
     let currentProjectTitle = "";
+    // 摄影专用单独列表（覆盖模式）
+    let currentPhotoList = [];
+    let currentPhotoIndex = 0;
 
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImage');
@@ -182,22 +239,45 @@
     const backBtn = document.getElementById('backBtn');
     const closeModalSpan = document.querySelector('.close-modal');
 
-    function openImageViewer(images, startIndex, projectTitle) {
-        currentImageList = images;
-        currentIndex = startIndex;
-        currentProjectTitle = projectTitle;
+    // 打开图片查看器（支持两种模式：城市设计多图组 / 摄影单图）
+    function openImageViewer(images, startIndex, type = 'urban') {
+        if (type === 'urban') {
+            currentImageList = images;
+            currentIndex = startIndex;
+            currentProjectTitle = "";
+            // 城市设计模式下，返回按钮用于返回城市设计模块（后面通过按钮逻辑）
+            backBtn.style.display = 'none'; // 城市设计模式下返回按钮在最后一张才会显示，由 updateModalImage 控制
+        } else {
+            // 摄影模式：直接显示图片，不需要返回模块按钮，只显示关闭和上一张下一张
+            currentPhotoList = images;
+            currentPhotoIndex = startIndex;
+            backBtn.style.display = 'none'; // 摄影模式下不显示返回按钮
+        }
         modal.style.display = 'block';
-        updateModalImage();
+        updateModalImage(type);
     }
 
-    function updateModalImage() {
-        if (currentImageList.length > 0 && currentIndex >= 0 && currentIndex < currentImageList.length) {
-            modalImg.src = currentImageList[currentIndex];
-            if (currentIndex === 0) prevBtn.style.visibility = 'hidden';
+    function updateModalImage(type = 'urban') {
+        let list, idx;
+        if (type === 'urban') {
+            list = currentImageList;
+            idx = currentIndex;
+        } else {
+            list = currentPhotoList;
+            idx = currentPhotoIndex;
+        }
+        if (list && list.length > 0 && idx >= 0 && idx < list.length) {
+            modalImg.src = list[idx];
+            if (idx === 0) prevBtn.style.visibility = 'hidden';
             else prevBtn.style.visibility = 'visible';
-            if (currentIndex === currentImageList.length - 1) {
+            if (idx === list.length - 1) {
                 nextBtn.style.visibility = 'hidden';
-                backBtn.style.display = 'block';
+                if (type === 'urban') {
+                    backBtn.style.display = 'block';
+                    backBtn.innerText = '← 返回城市设计模块';
+                } else {
+                    backBtn.style.display = 'none';
+                }
             } else {
                 nextBtn.style.visibility = 'visible';
                 backBtn.style.display = 'none';
@@ -205,10 +285,30 @@
         }
     }
 
-    function nextImage() { if (currentIndex < currentImageList.length - 1) { currentIndex++; updateModalImage(); } }
-    function prevImage() { if (currentIndex > 0) { currentIndex--; updateModalImage(); } }
+    function nextImage() {
+        // 判断当前是城市设计模式还是摄影模式
+        if (currentImageList.length > 0 && currentIndex < currentImageList.length - 1) {
+            currentIndex++;
+            updateModalImage('urban');
+        } else if (currentPhotoList.length > 0 && currentPhotoIndex < currentPhotoList.length - 1) {
+            currentPhotoIndex++;
+            updateModalImage('photo');
+        }
+    }
+
+    function prevImage() {
+        if (currentImageList.length > 0 && currentIndex > 0) {
+            currentIndex--;
+            updateModalImage('urban');
+        } else if (currentPhotoList.length > 0 && currentPhotoIndex > 0) {
+            currentPhotoIndex--;
+            updateModalImage('photo');
+        }
+    }
+
     function closeAndBackToUrban() {
         modal.style.display = 'none';
+        // 返回到城市设计模块（仅当当前是城市设计模式且最后一张时）
         const homePage = document.getElementById('homePage');
         const moduleArea = document.getElementById('moduleArea');
         if (homePage && moduleArea) {
@@ -218,14 +318,25 @@
                 if (!activeNav || activeNav.getAttribute('data-module') !== 'urban') showModuleView('urban');
             }
         }
+        // 清空当前图片列表，避免残留
+        currentImageList = [];
+        currentPhotoList = [];
+    }
+
+    // 关闭模态框（通用）
+    function closeModal() {
+        modal.style.display = 'none';
+        currentImageList = [];
+        currentPhotoList = [];
     }
 
     prevBtn.onclick = prevImage;
     nextBtn.onclick = nextImage;
-    closeModalSpan.onclick = () => { modal.style.display = 'none'; };
+    closeModalSpan.onclick = closeModal;
     backBtn.onclick = closeAndBackToUrban;
-    window.onclick = (event) => { if (event.target == modal) modal.style.display = 'none'; };
+    window.onclick = (event) => { if (event.target == modal) closeModal(); };
 
+    // ================= 模块内容生成 =================
     function getModuleHTML(moduleName) {
         if (moduleName === 'paper') {
             let html = '<div class="projects-grid">';
@@ -264,10 +375,24 @@
             }
             html += '</div>';
             return html;
+        } else if (moduleName === 'photo') {
+            // 瀑布流布局
+            let masonryHtml = '<div class="masonry">';
+            for (let i = 0; i < photoItems.length; i++) {
+                const item = photoItems[i];
+                masonryHtml += `
+                    <div class="masonry-item" data-photo-index="${i}">
+                        <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.caption)}" loading="lazy">
+                        <div class="masonry-caption">${escapeHtml(item.caption)}</div>
+                    </div>
+                `;
+            }
+            masonryHtml += '</div>';
+            // 添加一个简易提示
+            masonryHtml += `<div class="slow-tip" style="text-align:center; margin-top:1rem;">📸 点击任意图片可放大预览</div>`;
+            return masonryHtml;
         } else if (moduleName === 'sketch') {
             return '<div class="coming-soon">✍️ 手绘模块 · 建设中</div>';
-        } else if (moduleName === 'photo') {
-            return '<div class="coming-soon">📸 摄影模块 · 建设中</div>';
         }
         return '<div class="coming-soon">内容加载中...</div>';
     }
@@ -282,7 +407,9 @@
         });
     }
 
+    // 卡片/图片点击事件
     function attachCardEvents() {
+        // 处理城市设计的 project-card
         const cards = document.querySelectorAll('.project-card');
         cards.forEach(card => {
             card.removeEventListener('click', card._handler);
@@ -295,13 +422,27 @@
                 else if (imagesAttr) {
                     try {
                         const images = JSON.parse(imagesAttr);
-                        if (images && images.length) openImageViewer(images, 0, title);
+                        if (images && images.length) openImageViewer(images, 0, 'urban');
                         else alert('该作品暂无图片');
                     } catch(e) { alert('图片数据错误'); }
                 } else alert('内容未配置');
             };
             card.addEventListener('click', handler);
             card._handler = handler;
+        });
+
+        // 处理摄影模块的瀑布流图片点击
+        const photoItemsDom = document.querySelectorAll('.masonry-item');
+        photoItemsDom.forEach(item => {
+            item.removeEventListener('click', item._photoHandler);
+            const idx = parseInt(item.getAttribute('data-photo-index'));
+            const handler = () => {
+                // 提取所有摄影图片的 src 列表
+                const allPhotoSrcs = photoItems.map(p => p.src);
+                openImageViewer(allPhotoSrcs, idx, 'photo');
+            };
+            item.addEventListener('click', handler);
+            item._photoHandler = handler;
         });
     }
 
@@ -326,6 +467,8 @@
     function showHome() {
         document.getElementById('homePage').style.display = 'block';
         document.getElementById('moduleArea').style.display = 'none';
+        // 关闭可能残留的模态框
+        closeModal();
     }
 
     function init() {
