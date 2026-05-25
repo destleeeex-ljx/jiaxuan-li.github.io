@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>李佳轩 · 作品集</title>
     <style>
-        /* 样式与之前完全相同，为节省篇幅此处省略，请沿用您之前的样式代码 */
-        /* 您可以直接复制您现有的完整样式，或者使用下面简化版（保留所有样式） */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #f5f7fb; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; padding: 2rem 1rem; color: #1e2a3a; }
         .container { max-width: 1200px; margin: 0 auto; }
@@ -118,7 +116,7 @@
         }
     ];
 
-    // ================= 城市设计项目数据（图片路径改为 designjpgs 文件夹） =================
+    // ================= 城市设计项目数据（图片路径为 designjpgs 文件夹） =================
     const urbanProjects = [
         {
             title: "渔米",
@@ -169,7 +167,7 @@
         }
     ];
 
-    // 图片浏览逻辑（与之前相同，仅路径变化）
+    // 图片浏览逻辑
     let currentImageList = [];
     let currentIndex = 0;
     let currentProjectTitle = "";
@@ -247,12 +245,17 @@
         } else if (moduleName === 'urban') {
             let html = '<div class="projects-grid">';
             for (let proj of urbanProjects) {
+                const pageCount = proj.images.length;
                 html += `
                     <div class="project-card" data-images='${JSON.stringify(proj.images)}' data-title="${escapeHtml(proj.title)}">
                         <div class="project-title">${proj.emoji} ${escapeHtml(proj.title)}</div>
                         <div class="project-location">📍 ${escapeHtml(proj.location)}</div>
                         <div class="project-desc">${escapeHtml(proj.description)}</div>
-                        <div class="pdf-hint"><span>🖼️ 点击卡片查看设计图（可翻页）</span><div class="slow-tip">⏱️ 翻页时图片加载会比较慢，请耐心等待哦~</div></div>
+                        <div class="pdf-hint">
+                            <span>🖼️ 点击卡片查看设计图（可翻页）</span>
+                            <div style="margin-top: 0.3rem;">📄 共 ${pageCount} 页</div>
+                            <div class="slow-tip">⏱️ 翻页时图片加载会比较慢，请耐心等待哦~</div>
+                        </div>
                     </div>
                 `;
             }
