@@ -25,7 +25,7 @@
         .module-content { background: white; border-radius: 28px; padding: 2rem; min-height: 500px; }
         .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
         
-        /* 城市设计卡片样式（支持右上角大图） */
+        /* 卡片通用样式 */
         .project-card {
             background: white;
             border-radius: 24px;
@@ -53,10 +53,12 @@
             pointer-events: none;
             transition: none;
         }
-        /* 卡片文字内容区域，避免被图片遮挡 */
+        /* 卡片文字内容区域，避免被图片遮挡（增加 authors 和 meta） */
         .project-card .project-title,
+        .project-card .project-authors,
         .project-card .project-location,
         .project-card .project-desc,
+        .project-card .project-meta,
         .project-card .pdf-hint {
             padding-right: 110px;
         }
@@ -69,8 +71,10 @@
                 right: 0.8rem;
             }
             .project-card .project-title,
+            .project-card .project-authors,
             .project-card .project-location,
             .project-card .project-desc,
+            .project-card .project-meta,
             .project-card .pdf-hint {
                 padding-right: 85px;
             }
@@ -90,7 +94,7 @@
         .placeholder-item { background: #f8fafc; border-radius: 20px; padding: 2rem; text-align: center; flex: 1; min-width: 150px; color: #475569; border: 1px dashed #cbd5e1; }
         .footer { text-align: center; margin-top: 2rem; font-size: 0.75rem; color: #7c8b9c; }
 
-        /* 摄影模块 - 瀑布流样式 */
+        /* 摄影模块 - 瀑布流样式（不变） */
         .masonry {
             column-count: 3;
             column-gap: 1.5rem;
@@ -141,7 +145,7 @@
         .back-to-urban { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e2a3a; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 40px; cursor: pointer; font-size: 0.9rem; }
         @media (max-width: 640px) { .nav-btn { font-size: 1.5rem; } .back-to-urban { bottom: 15px; padding: 0.4rem 1rem; } .close-modal { top: 10px; right: 20px; font-size: 30px; } }
 
-        /* 加载提示层（居中，带进度条和文字） */
+        /* 加载提示层 */
         .loading-overlay {
             display: none;
             position: fixed;
@@ -253,12 +257,10 @@
             ifInfo: "IF=2.3",
             pdfUrl: "papers/2.pdf",
             thumbUrl: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/papers/2.jpg"
-  
         }
     ];
 
-
-    // ================= 城市设计项目数据（图片使用 jsDelivr CDN） =================
+    // ================= 城市设计项目数据 =================
     const urbanProjects = [
         {
             title: "渔米",
@@ -316,7 +318,7 @@
         }
     ];
 
-    // ================= 摄影模块数据（图片使用 jsDelivr CDN） =================
+    // ================= 摄影模块数据 =================
     const photoItems = [
         { src: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/photography/1.jpg", caption: "寄畅 · 无锡" },
         { src: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/photography/2.jpg", caption: "太平山顶 · 香港" },
@@ -327,7 +329,7 @@
         { src: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/photography/6.jpg", caption: "或许你喜欢吃东西吗" }
     ];
 
-    // 图片浏览逻辑（增加加载提示）
+    // 图片浏览逻辑（不变）
     let currentImageList = [];
     let currentIndex = 0;
     let currentProjectTitle = "";
@@ -342,26 +344,13 @@
     const closeModalSpan = document.querySelector('.close-modal');
     const loadingOverlay = document.getElementById('loadingOverlay');
 
-    // 显示加载提示
-    function showLoading() {
-        loadingOverlay.style.display = 'flex';
-    }
-    // 隐藏加载提示
-    function hideLoading() {
-        loadingOverlay.style.display = 'none';
-    }
+    function showLoading() { loadingOverlay.style.display = 'flex'; }
+    function hideLoading() { loadingOverlay.style.display = 'none'; }
 
-    // 设置图片并监听加载
     function setImageWithLoading(imgElement, src, onSuccess) {
         showLoading();
-        imgElement.onload = () => {
-            hideLoading();
-            if (onSuccess) onSuccess();
-        };
-        imgElement.onerror = () => {
-            hideLoading();
-            alert('图片加载失败，请稍后重试');
-        };
+        imgElement.onload = () => { hideLoading(); if (onSuccess) onSuccess(); };
+        imgElement.onerror = () => { hideLoading(); alert('图片加载失败，请稍后重试'); };
         imgElement.src = src;
     }
 
@@ -382,17 +371,10 @@
 
     function updateModalImage(type = 'urban') {
         let list, idx;
-        if (type === 'urban') {
-            list = currentImageList;
-            idx = currentIndex;
-        } else {
-            list = currentPhotoList;
-            idx = currentPhotoIndex;
-        }
+        if (type === 'urban') { list = currentImageList; idx = currentIndex; }
+        else { list = currentPhotoList; idx = currentPhotoIndex; }
         if (list && list.length > 0 && idx >= 0 && idx < list.length) {
-            // 使用带加载提示的方式切换图片
             setImageWithLoading(modalImg, list[idx], () => {
-                // 图片加载完成后更新按钮状态
                 if (idx === 0) prevBtn.style.visibility = 'hidden';
                 else prevBtn.style.visibility = 'visible';
                 if (idx === list.length - 1) {
@@ -400,9 +382,7 @@
                     if (type === 'urban') {
                         backBtn.style.display = 'block';
                         backBtn.innerText = '← 返回城市设计模块';
-                    } else {
-                        backBtn.style.display = 'none';
-                    }
+                    } else { backBtn.style.display = 'none'; }
                 } else {
                     nextBtn.style.visibility = 'visible';
                     backBtn.style.display = 'none';
@@ -413,22 +393,15 @@
 
     function nextImage() {
         if (currentImageList.length > 0 && currentIndex < currentImageList.length - 1) {
-            currentIndex++;
-            updateModalImage('urban');
+            currentIndex++; updateModalImage('urban');
         } else if (currentPhotoList.length > 0 && currentPhotoIndex < currentPhotoList.length - 1) {
-            currentPhotoIndex++;
-            updateModalImage('photo');
+            currentPhotoIndex++; updateModalImage('photo');
         }
     }
 
     function prevImage() {
-        if (currentImageList.length > 0 && currentIndex > 0) {
-            currentIndex--;
-            updateModalImage('urban');
-        } else if (currentPhotoList.length > 0 && currentPhotoIndex > 0) {
-            currentPhotoIndex--;
-            updateModalImage('photo');
-        }
+        if (currentImageList.length > 0 && currentIndex > 0) { currentIndex--; updateModalImage('urban'); }
+        else if (currentPhotoList.length > 0 && currentPhotoIndex > 0) { currentPhotoIndex--; updateModalImage('photo'); }
     }
 
     function closeAndBackToUrban() {
@@ -450,7 +423,7 @@
         modal.style.display = 'none';
         currentImageList = [];
         currentPhotoList = [];
-        hideLoading(); // 确保关闭时隐藏加载提示
+        hideLoading();
     }
 
     prevBtn.onclick = prevImage;
@@ -466,6 +439,7 @@
             for (let p of papersData) {
                 html += `
                     <div class="project-card" data-pdf="${p.pdfUrl}">
+                        <img class="card-thumb" src="${escapeHtml(p.thumbUrl)}" alt="代表图" title="">
                         <div class="project-title">📄 ${escapeHtml(p.title)}</div>
                         <div class="project-authors">👥 ${escapeHtml(p.authors)}</div>
                         <div class="project-meta">
