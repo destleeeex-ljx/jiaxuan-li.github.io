@@ -140,6 +140,47 @@
         .next-btn { right: 20px; }
         .back-to-urban { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e2a3a; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 40px; cursor: pointer; font-size: 0.9rem; }
         @media (max-width: 640px) { .nav-btn { font-size: 1.5rem; } .back-to-urban { bottom: 15px; padding: 0.4rem 1rem; } .close-modal { top: 10px; right: 20px; font-size: 30px; } }
+
+        /* 加载提示层（居中，带进度条和文字） */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .loading-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem 2.5rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            min-width: 200px;
+        }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #1e40af;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            font-size: 1rem;
+            color: #1e2a3a;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -150,7 +191,7 @@
     </div>
 
     <div id="homePage">
-        <div class="welcome">✨ 您希望从哪里了解我？ ✨</div>
+        <div class="welcome">✨ 您希望从哪里开始了解我 ✨</div>
         <div class="home-grid">
             <div class="home-card" data-module="paper"><div class="home-emoji">📄</div><div class="home-title">论文</div><div>学术研究成果 · 已发表论文</div></div>
             <div class="home-card" data-module="urban"><div class="home-emoji">🏙️</div><div class="home-title">城市设计</div><div>设计作品 · 城市 / 乡村</div></div>
@@ -181,6 +222,14 @@
         <button id="prevBtn" class="nav-btn prev-btn">❮</button>
         <button id="nextBtn" class="nav-btn next-btn">❯</button>
         <button id="backBtn" class="back-to-urban" style="display: none;">← 返回城市设计模块</button>
+    </div>
+</div>
+
+<!-- 加载提示层 -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-card">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">正在加载中...</div>
     </div>
 </div>
 
@@ -275,7 +324,7 @@
         { src: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/photography/6.jpg", caption: "或许你喜欢吃东西吗" }
     ];
 
-    // 图片浏览逻辑（不变）
+    // 图片浏览逻辑（增加加载提示）
     let currentImageList = [];
     let currentIndex = 0;
     let currentProjectTitle = "";
@@ -288,6 +337,30 @@
     const nextBtn = document.getElementById('nextBtn');
     const backBtn = document.getElementById('backBtn');
     const closeModalSpan = document.querySelector('.close-modal');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+
+    // 显示加载提示
+    function showLoading() {
+        loadingOverlay.style.display = 'flex';
+    }
+    // 隐藏加载提示
+    function hideLoading() {
+        loadingOverlay.style.display = 'none';
+    }
+
+    // 设置图片并监听加载
+    function setImageWithLoading(imgElement, src, onSuccess) {
+        showLoading();
+        imgElement.onload = () => {
+            hideLoading();
+            if (onSuccess) onSuccess();
+        };
+        imgElement.onerror = () => {
+            hideLoading();
+            alert('图片加载失败，请稍后重试');
+        };
+        imgElement.src = src;
+    }
 
     function openImageViewer(images, startIndex, type = 'urban') {
         if (type === 'urban') {
@@ -314,21 +387,24 @@
             idx = currentPhotoIndex;
         }
         if (list && list.length > 0 && idx >= 0 && idx < list.length) {
-            modalImg.src = list[idx];
-            if (idx === 0) prevBtn.style.visibility = 'hidden';
-            else prevBtn.style.visibility = 'visible';
-            if (idx === list.length - 1) {
-                nextBtn.style.visibility = 'hidden';
-                if (type === 'urban') {
-                    backBtn.style.display = 'block';
-                    backBtn.innerText = '← 返回城市设计模块';
+            // 使用带加载提示的方式切换图片
+            setImageWithLoading(modalImg, list[idx], () => {
+                // 图片加载完成后更新按钮状态
+                if (idx === 0) prevBtn.style.visibility = 'hidden';
+                else prevBtn.style.visibility = 'visible';
+                if (idx === list.length - 1) {
+                    nextBtn.style.visibility = 'hidden';
+                    if (type === 'urban') {
+                        backBtn.style.display = 'block';
+                        backBtn.innerText = '← 返回城市设计模块';
+                    } else {
+                        backBtn.style.display = 'none';
+                    }
                 } else {
+                    nextBtn.style.visibility = 'visible';
                     backBtn.style.display = 'none';
                 }
-            } else {
-                nextBtn.style.visibility = 'visible';
-                backBtn.style.display = 'none';
-            }
+            });
         }
     }
 
@@ -371,6 +447,7 @@
         modal.style.display = 'none';
         currentImageList = [];
         currentPhotoList = [];
+        hideLoading(); // 确保关闭时隐藏加载提示
     }
 
     prevBtn.onclick = prevImage;
@@ -412,7 +489,7 @@
                         <div class="pdf-hint">
                             <span>🖼️ 点击卡片查看设计图（可翻页）</span>
                             <div style="margin-top: 0.3rem;">📄 共 ${pageCount} 页</div>
-                            <div class="slow-tip">⏱️ 翻页时图片加载会比较快~</div>
+                            <div class="slow-tip">⏱️ 翻页时图片加载会比较慢，请耐心等待哦~</div>
                         </div>
                     </div>
                 `;
