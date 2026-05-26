@@ -25,7 +25,7 @@
         .module-content { background: white; border-radius: 28px; padding: 2rem; min-height: 500px; }
         .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
         
-        /* 城市设计卡片样式 */
+        /* 城市设计卡片样式（支持右上角大图） */
         .project-card {
             background: white;
             border-radius: 24px;
@@ -39,6 +39,7 @@
             transform: translateY(-4px);
             box-shadow: 0 12px 20px -8px rgba(0,0,0,0.1);
         }
+        /* 右上角装饰图片（不可点击） */
         .card-thumb {
             position: absolute;
             top: 1rem;
@@ -50,19 +51,29 @@
             border: 2px solid white;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             pointer-events: none;
+            transition: none;
         }
+        /* 卡片文字内容区域，避免被图片遮挡 */
         .project-card .project-title,
         .project-card .project-location,
         .project-card .project-desc,
         .project-card .pdf-hint {
             padding-right: 110px;
         }
+        /* 移动端小图尺寸稍小 */
         @media (max-width: 640px) {
-            .card-thumb { width: 70px; height: 70px; top: 0.8rem; right: 0.8rem; }
+            .card-thumb {
+                width: 70px;
+                height: 70px;
+                top: 0.8rem;
+                right: 0.8rem;
+            }
             .project-card .project-title,
             .project-card .project-location,
             .project-card .project-desc,
-            .project-card .pdf-hint { padding-right: 85px; }
+            .project-card .pdf-hint {
+                padding-right: 85px;
+            }
         }
 
         .project-title { font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; }
@@ -79,100 +90,59 @@
         .placeholder-item { background: #f8fafc; border-radius: 20px; padding: 2rem; text-align: center; flex: 1; min-width: 150px; color: #475569; border: 1px dashed #cbd5e1; }
         .footer { text-align: center; margin-top: 2rem; font-size: 0.75rem; color: #7c8b9c; }
 
-        /* 摄影模块 - 瀑布流 */
-        .masonry { column-count: 3; column-gap: 1.5rem; }
-        .masonry-item { break-inside: avoid; margin-bottom: 1.5rem; cursor: pointer; transition: transform 0.2s; }
-        .masonry-item:hover { transform: translateY(-4px); }
-        .masonry-item img { width: 100%; border-radius: 20px; display: block; box-shadow: 0 6px 14px rgba(0,0,0,0.1); }
-        .masonry-caption { padding: 0.5rem 0.5rem 0; font-size: 0.8rem; color: #4b5563; text-align: center; }
-        @media (max-width: 768px) { .masonry { column-count: 2; } }
-        @media (max-width: 480px) { .masonry { column-count: 1; } }
+        /* 摄影模块 - 瀑布流样式 */
+        .masonry {
+            column-count: 3;
+            column-gap: 1.5rem;
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .masonry-item:hover {
+            transform: translateY(-4px);
+        }
+        .masonry-item img {
+            width: 100%;
+            border-radius: 20px;
+            display: block;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+            transition: box-shadow 0.2s;
+        }
+        .masonry-item img:hover {
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+        .masonry-caption {
+            padding: 0.5rem 0.5rem 0 0.5rem;
+            font-size: 0.8rem;
+            color: #4b5563;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .masonry { column-count: 2; }
+        }
+        @media (max-width: 480px) {
+            .masonry { column-count: 1; }
+        }
 
-        /* 图片预览弹窗 */
+        /* 图片弹窗样式 */
         .image-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); overflow: auto; }
         .image-modal-content { position: relative; margin: auto; top: 50%; transform: translateY(-50%); max-width: 90%; max-height: 90%; text-align: center; }
-        .image-modal-content img { max-width: 100%; max-height: 80vh; border-radius: 12px; }
-        .close-modal { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; cursor: pointer; z-index: 1001; }
+        .image-modal-content img { max-width: 100%; max-height: 80vh; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.3); }
+        .close-modal { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; z-index: 1001; }
         .close-modal:hover { color: #ccc; }
         .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; font-size: 2rem; padding: 0.5rem 1rem; cursor: pointer; border-radius: 50%; }
+        .nav-btn:hover { background: rgba(0,0,0,0.9); }
         .prev-btn { left: 20px; }
         .next-btn { right: 20px; }
         .back-to-urban { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e2a3a; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 40px; cursor: pointer; font-size: 0.9rem; }
         @media (max-width: 640px) { .nav-btn { font-size: 1.5rem; } .back-to-urban { bottom: 15px; padding: 0.4rem 1rem; } .close-modal { top: 10px; right: 20px; font-size: 30px; } }
-
-        /* PDF 预览模态框（新增） */
-        .pdf-modal {
-            display: none;
-            position: fixed;
-            z-index: 1001;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.85);
-        }
-        .pdf-modal-content {
-            position: relative;
-            margin: 5% auto;
-            width: 90%;
-            height: 85%;
-            background: #fff;
-            border-radius: 16px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        .pdf-close {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            color: #333;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 1002;
-            background: rgba(255,255,255,0.8);
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 32px;
-        }
-        .pdf-close:hover { background: #fff; }
-        .pdf-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .pdf-loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 1rem;
-            color: #333;
-            background: rgba(255,255,255,0.9);
-            padding: 0.5rem 1rem;
-            border-radius: 30px;
-            z-index: 1003;
-        }
-
-        /* 全局进度条 */
-        #global-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, #1e40af, #3b82f6);
-            z-index: 9999;
-            transition: width 0.3s ease;
-            box-shadow: 0 0 4px #3b82f6;
-        }
     </style>
 </head>
 <body>
-<div id="global-progress"></div>
 <div class="container">
     <div class="header">
         <div class="name">李佳轩 · Jiaxuan Li</div>
@@ -203,7 +173,7 @@
     <div class="footer">© 李佳轩 · Portfolio</div>
 </div>
 
-<!-- 图片预览模态框 -->
+<!-- 全局图片预览模态框 -->
 <div id="imageModal" class="image-modal">
     <span class="close-modal">&times;</span>
     <div class="image-modal-content">
@@ -214,30 +184,7 @@
     </div>
 </div>
 
-<!-- PDF 预览模态框（在线预览，不下载） -->
-<div id="pdfModal" class="pdf-modal">
-    <div class="pdf-modal-content">
-        <span class="pdf-close">&times;</span>
-        <div id="pdfLoading" class="pdf-loading">⏳ 正在加载 PDF，请稍候...</div>
-        <iframe id="pdfIframe" class="pdf-iframe" src="about:blank"></iframe>
-    </div>
-</div>
-
 <script>
-    // ================= 全局进度条控制 =================
-    const progressBar = document.getElementById('global-progress');
-    function startProgress() {
-        progressBar.style.width = '30%';
-        progressBar.style.transition = 'width 0.4s';
-    }
-    function finishProgress() {
-        progressBar.style.width = '100%';
-        setTimeout(() => { progressBar.style.width = '0%'; }, 300);
-    }
-    function showError() {
-        progressBar.style.width = '0%';
-    }
-
     // ================= 论文数据（使用 jsDelivr CDN） =================
     const papersData = [
         {
@@ -258,7 +205,7 @@
         }
     ];
 
-    // ================= 城市设计项目数据 =================
+    // ================= 城市设计项目数据（图片使用 jsDelivr CDN） =================
     const urbanProjects = [
         {
             title: "渔米",
@@ -316,7 +263,7 @@
         }
     ];
 
-    // ================= 摄影模块数据 =================
+    // ================= 摄影模块数据（图片使用 jsDelivr CDN） =================
     const photoItems = [
         { src: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/photography/1.jpg", caption: "寄畅 · 无锡" },
         { src: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/photography/2.jpg", caption: "太平山顶 · 香港" },
@@ -327,39 +274,44 @@
         { src: "https://cdn.jsdelivr.net/gh/destleeeex-ljx/jiaxuan-li.github.io@main/photography/6.jpg", caption: "或许你喜欢吃东西吗" }
     ];
 
-    // 图片预览逻辑（复用城市设计和摄影）
+    // 图片浏览逻辑（不变）
     let currentImageList = [];
     let currentIndex = 0;
+    let currentProjectTitle = "";
     let currentPhotoList = [];
     let currentPhotoIndex = 0;
 
-    const imgModal = document.getElementById('imageModal');
+    const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImage');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const backBtn = document.getElementById('backBtn');
-    const closeImgModal = document.querySelector('#imageModal .close-modal');
+    const closeModalSpan = document.querySelector('.close-modal');
 
     function openImageViewer(images, startIndex, type = 'urban') {
-        startProgress();
         if (type === 'urban') {
             currentImageList = images;
             currentIndex = startIndex;
+            currentProjectTitle = "";
             backBtn.style.display = 'none';
         } else {
             currentPhotoList = images;
             currentPhotoIndex = startIndex;
             backBtn.style.display = 'none';
         }
-        imgModal.style.display = 'block';
+        modal.style.display = 'block';
         updateModalImage(type);
-        finishProgress();
     }
 
     function updateModalImage(type = 'urban') {
         let list, idx;
-        if (type === 'urban') { list = currentImageList; idx = currentIndex; }
-        else { list = currentPhotoList; idx = currentPhotoIndex; }
+        if (type === 'urban') {
+            list = currentImageList;
+            idx = currentIndex;
+        } else {
+            list = currentPhotoList;
+            idx = currentPhotoIndex;
+        }
         if (list && list.length > 0 && idx >= 0 && idx < list.length) {
             modalImg.src = list[idx];
             if (idx === 0) prevBtn.style.visibility = 'hidden';
@@ -369,6 +321,8 @@
                 if (type === 'urban') {
                     backBtn.style.display = 'block';
                     backBtn.innerText = '← 返回城市设计模块';
+                } else {
+                    backBtn.style.display = 'none';
                 }
             } else {
                 nextBtn.style.visibility = 'visible';
@@ -379,20 +333,26 @@
 
     function nextImage() {
         if (currentImageList.length > 0 && currentIndex < currentImageList.length - 1) {
-            currentIndex++; updateModalImage('urban');
+            currentIndex++;
+            updateModalImage('urban');
         } else if (currentPhotoList.length > 0 && currentPhotoIndex < currentPhotoList.length - 1) {
-            currentPhotoIndex++; updateModalImage('photo');
+            currentPhotoIndex++;
+            updateModalImage('photo');
         }
     }
+
     function prevImage() {
         if (currentImageList.length > 0 && currentIndex > 0) {
-            currentIndex--; updateModalImage('urban');
+            currentIndex--;
+            updateModalImage('urban');
         } else if (currentPhotoList.length > 0 && currentPhotoIndex > 0) {
-            currentPhotoIndex--; updateModalImage('photo');
+            currentPhotoIndex--;
+            updateModalImage('photo');
         }
     }
+
     function closeAndBackToUrban() {
-        imgModal.style.display = 'none';
+        modal.style.display = 'none';
         const homePage = document.getElementById('homePage');
         const moduleArea = document.getElementById('moduleArea');
         if (homePage && moduleArea) {
@@ -405,47 +365,18 @@
         currentImageList = [];
         currentPhotoList = [];
     }
-    function closeImageModal() {
-        imgModal.style.display = 'none';
+
+    function closeModal() {
+        modal.style.display = 'none';
         currentImageList = [];
         currentPhotoList = [];
     }
+
     prevBtn.onclick = prevImage;
     nextBtn.onclick = nextImage;
-    closeImgModal.onclick = closeImageModal;
+    closeModalSpan.onclick = closeModal;
     backBtn.onclick = closeAndBackToUrban;
-    window.onclick = (e) => { if (e.target == imgModal) closeImageModal(); };
-
-    // ================= PDF 在线预览（不下载） =================
-    const pdfModal = document.getElementById('pdfModal');
-    const pdfIframe = document.getElementById('pdfIframe');
-    const pdfClose = document.querySelector('.pdf-close');
-    const pdfLoading = document.getElementById('pdfLoading');
-
-    function openPDF(pdfUrl) {
-        startProgress();
-        pdfModal.style.display = 'block';
-        pdfLoading.style.display = 'block';
-        pdfIframe.src = 'about:blank';
-        // 设置 iframe 加载完成时隐藏 loading
-        pdfIframe.onload = function() {
-            pdfLoading.style.display = 'none';
-            finishProgress();
-        };
-        pdfIframe.onerror = function() {
-            pdfLoading.innerHTML = '❌ PDF 加载失败，请稍后重试';
-            setTimeout(() => { pdfLoading.style.display = 'none'; }, 2000);
-            finishProgress();
-        };
-        pdfIframe.src = pdfUrl;
-    }
-    function closePDF() {
-        pdfModal.style.display = 'none';
-        pdfIframe.src = 'about:blank';
-        pdfLoading.style.display = 'block';
-    }
-    pdfClose.onclick = closePDF;
-    window.onclick = (e) => { if (e.target == pdfModal) closePDF(); };
+    window.onclick = (event) => { if (event.target == modal) closeModal(); };
 
     // ================= 模块内容生成 =================
     function getModuleHTML(moduleName) {
@@ -461,7 +392,7 @@
                             <span class="project-if">${escapeHtml(p.ifInfo)}</span>
                             <span class="project-year">${escapeHtml(p.year)}</span>
                         </div>
-                        <div class="pdf-hint"><span>📄 点击卡片在线预览PDF（不下载）</span><div class="slow-tip">⏱️ 加载可能稍慢，请等待进度条</div></div>
+                        <div class="pdf-hint"><span>📄 点击卡片查看PDF全文</span><div class="slow-tip">⏱️ 第一次打开卡片会有些慢，请耐心等待哦~</div></div>
                     </div>
                 `;
             }
@@ -473,14 +404,14 @@
                 const pageCount = proj.images.length;
                 html += `
                     <div class="project-card" data-images='${JSON.stringify(proj.images)}' data-title="${escapeHtml(proj.title)}">
-                        <img class="card-thumb" src="${escapeHtml(proj.thumbUrl)}" alt="代表图">
+                        <img class="card-thumb" src="${escapeHtml(proj.thumbUrl)}" alt="代表图" title="">
                         <div class="project-title">${proj.emoji} ${escapeHtml(proj.title)}</div>
                         <div class="project-location">📍 ${escapeHtml(proj.location)}</div>
                         <div class="project-desc">${escapeHtml(proj.description)}</div>
                         <div class="pdf-hint">
                             <span>🖼️ 点击卡片查看设计图（可翻页）</span>
                             <div style="margin-top: 0.3rem;">📄 共 ${pageCount} 页</div>
-                            <div class="slow-tip">⏱️ 加载速度快~</div>
+                            <div class="slow-tip">⏱️ 翻页时图片加载会比较快~</div>
                         </div>
                     </div>
                 `;
@@ -517,39 +448,27 @@
     }
 
     function attachCardEvents() {
-        // 论文卡片：打开PDF预览
-        const paperCards = document.querySelectorAll('.project-card[data-pdf]');
-        paperCards.forEach(card => {
-            card.removeEventListener('click', card._pdfHandler);
-            const pdfUrl = card.getAttribute('data-pdf');
-            const handler = (e) => {
-                e.stopPropagation();
-                if (pdfUrl) openPDF(pdfUrl);
-                else alert('PDF地址无效');
-            };
-            card.addEventListener('click', handler);
-            card._pdfHandler = handler;
-        });
-        // 城市设计卡片
-        const urbanCards = document.querySelectorAll('.project-card[data-images]');
-        urbanCards.forEach(card => {
-            card.removeEventListener('click', card._urbanHandler);
+        const cards = document.querySelectorAll('.project-card');
+        cards.forEach(card => {
+            card.removeEventListener('click', card._handler);
+            const pdfPath = card.getAttribute('data-pdf');
             const imagesAttr = card.getAttribute('data-images');
             const handler = (e) => {
                 if (e.target.classList && e.target.classList.contains('card-thumb')) return;
                 e.stopPropagation();
-                if (imagesAttr) {
+                if (pdfPath) window.open(pdfPath, '_blank');
+                else if (imagesAttr) {
                     try {
                         const images = JSON.parse(imagesAttr);
                         if (images && images.length) openImageViewer(images, 0, 'urban');
                         else alert('该作品暂无图片');
                     } catch(e) { alert('图片数据错误'); }
-                }
+                } else alert('内容未配置');
             };
             card.addEventListener('click', handler);
-            card._urbanHandler = handler;
+            card._handler = handler;
         });
-        // 摄影瀑布流
+
         const photoItemsDom = document.querySelectorAll('.masonry-item');
         photoItemsDom.forEach(item => {
             item.removeEventListener('click', item._photoHandler);
@@ -564,7 +483,6 @@
     }
 
     function showModuleView(moduleName) {
-        startProgress();
         const homePage = document.getElementById('homePage');
         const moduleArea = document.getElementById('moduleArea');
         if (!homePage || !moduleArea) return;
@@ -580,14 +498,12 @@
         }
         homePage.style.display = 'none';
         moduleArea.style.display = 'block';
-        finishProgress();
     }
 
     function showHome() {
         document.getElementById('homePage').style.display = 'block';
         document.getElementById('moduleArea').style.display = 'none';
-        closeImageModal();
-        closePDF();
+        closeModal();
     }
 
     function init() {
